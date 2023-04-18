@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@ark-ui/solid": "^0.1.0",
+    "@solid-primitives/clipboard": "^1.5.4",
     "@solidjs/router": "0.8.2",
     "@tanstack/solid-query": "^4.29.1",
     "daisyui": "^2.51.5",

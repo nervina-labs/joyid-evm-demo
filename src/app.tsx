@@ -9,7 +9,7 @@ const App: Component = () => {
 
   return (
     <>
-      <nav class="bg-gray-200 text-gray-900 px-4">
+      {/* <nav class="bg-gray-200 text-gray-900 px-4">
         <ul class="flex items-center">
           <li class="py-2 px-4">
             <Link href="/" class="no-underline hover:underline">
@@ -37,9 +37,9 @@ const App: Component = () => {
             />
           </li>
         </ul>
-      </nav>
+      </nav> */}
 
-      <main>
+      <main class="h-100vh w-100% max-w-500px p-5">
         <Route />
       </main>
     </>

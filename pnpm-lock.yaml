@@ -2,6 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@ark-ui/solid': ^0.1.0
+  '@solid-primitives/clipboard': ^1.5.4
   '@solidjs/router': 0.8.2
   '@tanstack/solid-query': ^4.29.1
   '@typescript-eslint/eslint-plugin': ^5.59.0
@@ -23,6 +24,7 @@ specifiers:
 
 dependencies:
   '@ark-ui/solid': 0.1.0_solid-js@1.7.3
+  '@solid-primitives/clipboard': 1.5.4_solid-js@1.7.3
   '@solidjs/router': 0.8.2_solid-js@1.7.3
   '@tanstack/solid-query': 4.29.1_solid-js@1.7.3
   daisyui: 2.51.5_sdbpblax374q56eabcljdsk5hu
@@ -719,6 +721,23 @@ packages:
     resolution: {integrity: sha512-TvYSj8d0lZrB3IfqJyv1DgOMFTollSXUGHEh0vSEneP1BHHYbsRTvq9BNrZbxX8gJyLZLkGsm6WgqnGe4HZ6qQ==}
     peerDependencies:
       solid-js: '>=1.6.0'
+    dependencies:
+      solid-js: 1.7.3
+    dev: false
+
+  /@solid-primitives/clipboard/1.5.4_solid-js@1.7.3:
+    resolution: {integrity: sha512-cycedcO71We6idHomneUC/EqcgWihjSpYKKJSzicBu/Pwly2eudnZ51q91U0LdKraPYRtT+12lZOPPQ92ehLCQ==}
+    peerDependencies:
+      solid-js: ^1.6.12
+    dependencies:
+      '@solid-primitives/utils': 6.1.0_solid-js@1.7.3
+      solid-js: 1.7.3
+    dev: false
+
+  /@solid-primitives/utils/6.1.0_solid-js@1.7.3:
+    resolution: {integrity: sha512-uTikKFrq33UO+MnKt2WzZr9WYbQe5YX58ytGkL+29DL6o0pZs1wrICbd4ymzSm8azqzMcQqEQOL3HLWjuv9tLw==}
+    peerDependencies:
+      solid-js: ^1.6.12
     dependencies:
       solid-js: 1.7.3
     dev: false

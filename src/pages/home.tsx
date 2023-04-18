@@ -1,31 +1,30 @@
-import { createSignal } from 'solid-js'
+import { Component, createSignal } from 'solid-js'
+import { writeClipboard } from '@solid-primitives/clipboard'
 
-export default function Home() {
-  const [count, setCount] = createSignal(0)
+export const Home: Component = () => {
+  const [address, setCount] = createSignal('ckt1qrfrw...uhe3yw')
 
   return (
-    <section class="bg-gray-100 text-gray-700 p-8">
-      <h1 class="text-2xl font-bold">Home</h1>
-      <p class="mt-4">This is the home page.</p>
-
-      <div class="flex items-center space-x-2">
-        <button
-          class="border rounded-lg px-2 border-gray-900"
-          onClick={() => setCount(count() - 1)}
-        >
-          -
-        </button>
-
-        <output class="p-10px">Count: {count()}</output>
-
-        <button
-          class="border rounded-lg px-2 border-gray-900"
-          onClick={() => setCount(count() + 1)}
-        >
-          +
-        </button>
-        <button class="btn">Button</button>
+    <section class="flex-col flex items-center">
+      <div class="stat">
+        <div class="stat-title">Account balance</div>
+        <div class="stat-value">{address()}</div>
+        <div class="stat-actions mt-2">
+          <button
+            class="btn btn-xs btn-success btn-outline"
+            onClick={() => {
+              writeClipboard(address())
+            }}
+          >
+            Copy Address
+          </button>
+        </div>
+        <div class="stat-desc">↗︎ 400 (22%)</div>
+        <div class="stat-desc">↗︎ 400 (22%)</div>
       </div>
+      <button class="btn btn-wide mt-8">Sign Message</button>
+      <button class="btn btn-wide mt-8">Send ETH</button>
+      <button class="btn btn-wide mt-8">Send ERC20</button>
     </section>
   )
 }
