@@ -1,5 +1,4 @@
 /* @refresh reload */
-import 'windi.css'
 import './global.css'
 
 import { render } from 'solid-js/web'

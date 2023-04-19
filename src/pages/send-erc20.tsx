@@ -1,7 +1,7 @@
 import { useNavigate } from '@solidjs/router'
 import { Component, createEffect, createSignal } from 'solid-js'
 
-export const SendEth: Component = () => {
+export const SendERC20: Component = () => {
   const [toAddress, setToAddress] = createSignal('ckt1qrfrw...uhe3yw')
   const [amount, setAmount] = createSignal('0.01')
   const navi = useNavigate()
@@ -35,7 +35,7 @@ export const SendEth: Component = () => {
             value={amount()}
             onInput={(e) => setAmount(e.target.value)}
           />
-          <span>ETH</span>
+          <span>ERC20</span>
         </label>
       </div>
       <button class="btn btn-wide btn-primary mt-12">Send</button>

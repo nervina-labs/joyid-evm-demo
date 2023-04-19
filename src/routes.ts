@@ -5,6 +5,8 @@ import { Home } from './pages/home'
 import AboutData from './pages/about.data'
 import { Root } from './pages/root'
 import { SendEth } from './pages/send'
+import { SendERC20 } from './pages/send-erc20'
+import { SignMessage } from './pages/sign-message'
 
 export const routes: RouteDefinition[] = [
   {
@@ -18,6 +20,14 @@ export const routes: RouteDefinition[] = [
   {
     path: '/send',
     component: SendEth,
+  },
+  {
+    path: '/send-erc20',
+    component: SendERC20,
+  },
+  {
+    path: '/sign-message',
+    component: SignMessage,
   },
   {
     path: '/about',
