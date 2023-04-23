@@ -28,6 +28,7 @@ specifiers:
   lucide-solid: ^0.162.0
   postcss: ^8.4.22
   prettier: ^2.8.7
+  rlp: ^3.0.0
   solid-js: 1.7.3
   tailwindcss: ^3.3.1
   typescript: '5'
@@ -53,6 +54,7 @@ dependencies:
   ethers: 6.3.0
   jsbi: 4.3.0
   lucide-solid: 0.162.0_solid-js@1.7.3
+  rlp: 3.0.0
   solid-js: 1.7.3
 
 devDependencies:
@@ -3561,6 +3563,11 @@ packages:
       hash-base: 3.1.0
       inherits: 2.0.4
     dev: true
+
+  /rlp/3.0.0:
+    resolution: {integrity: sha512-PD6U2PGk6Vq2spfgiWZdomLvRGDreBLxi5jv5M8EpRo3pU6VEm31KO+HFxE18Q3vgqfDrQ9pZA3FP95rkijNKw==}
+    hasBin: true
+    dev: false
 
   /rollup/3.13.0:
     resolution: {integrity: sha512-HJwQtrXAc0AmyDohTJ/2c+Bx/sWPScJLlAUJ1kuD7rAkCro8Cr2SnVB2gVYBiSLxpgD2kZ24jbyXtG++GumrYQ==}

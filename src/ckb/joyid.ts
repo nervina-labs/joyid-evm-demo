@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-param-reassign */
@@ -47,13 +48,7 @@ import {
   CKB_INDEXER_URL,
 } from '../env'
 import { Aggregator } from './aggregator'
-
-function append0x(s: string) {
-  if (s.startsWith('0x')) {
-    return s
-  }
-  return `0x${s}`
-}
+import { append0x } from '../utils'
 
 const { ScriptValue } = values
 const { CKBHasher, ckbHash } = utils
@@ -61,7 +56,7 @@ const { CKBHasher, ckbHash } = utils
 export const rpc = new RPC(CKB_RPC_URL)
 export const indexer = new Indexer(CKB_INDEXER_URL, CKB_RPC_URL)
 
-const joyidScriptConfig: ScriptConfig = {
+export const joyidScriptConfig: ScriptConfig = {
   CODE_HASH:
     '0xd23761b364210735c19c60561d213fb3beae2fd6172743719eff6920e020baac',
   HASH_TYPE: 'type',
@@ -410,6 +405,7 @@ export function init(
           pubkey,
           keyType,
           alg,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } as any,
       },
     })

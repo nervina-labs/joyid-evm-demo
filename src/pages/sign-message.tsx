@@ -2,7 +2,7 @@ import { Navigate, useNavigate } from '@solidjs/router'
 import { Component, Show, createSignal } from 'solid-js'
 import { useAuthData } from '../hooks/localStorage'
 import { useSignerContext } from '../hooks/signer'
-import { SignMessageResponseData } from '@joyid/core'
+import { SignMessageResponseData, verifySignature } from '@joyid/core'
 
 export const SignMessage: Component = () => {
   const [challenge, setChallenge] = createSignal('Hello World')
@@ -18,6 +18,14 @@ export const SignMessage: Component = () => {
     if (res) {
       setSignature(res.signature)
       setSignedData(res)
+    }
+  }
+
+  const verifyMessage = async () => {
+    const data = signedData()
+    if (data) {
+      const res = await verifySignature(data)
+      alert(res)
     }
   }
 
@@ -38,6 +46,7 @@ export const SignMessage: Component = () => {
             placeholder="Signature"
             value={signature()}
             readOnly
+            disabled
           />
         </div>
         <Show when={signedData() !== null}>
@@ -58,6 +67,7 @@ export const SignMessage: Component = () => {
         <button
           class="btn btn-wide btn-outline btn-secondary mt-8"
           disabled={signature().length === 0}
+          onClick={verifyMessage}
         >
           Verify Message
         </button>

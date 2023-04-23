@@ -13,7 +13,6 @@ export function createLocalStore<T extends object>(
   )
   createEffect(() => {
     localStorage.setItem(name, JSON.stringify(state))
-    console.log('fuck')
   })
   return [state, setState]
 }

@@ -17,7 +17,7 @@ export const JOY_ID_SERVER_URL =
 
 export const JOY_ID_LOCK_TX_HASH =
   import.meta.env.VITE_APP_JOY_ID_LOCK_TX_HASH ??
-  '0x220a92ad42c1ce5927326975c1a97fffa473810f55a65f4ded4fbcc04799185f'
+  '0xf35178c7a1a5a4e5b164157aa549a493cebc9a3079b6a9ede7ae5207adb3f4d4'
 
 export const COTA_TYPE_TX_HASH =
   import.meta.env.VITE_APP_COTA_TYPE_TX_HASH ??

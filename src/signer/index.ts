@@ -10,6 +10,7 @@ import {
   TypedDataField,
   hexlify,
   keccak256,
+  Transaction,
 } from 'ethers'
 import {
   authWithPopup,
@@ -21,12 +22,14 @@ import {
 } from '@joyid/core'
 import { addressToScript } from '@ckb-lumos/helpers'
 import { utils } from '@ckb-lumos/base'
-import { init } from '../ckb'
+import { init } from '../ckb/joyid'
+import { remove0x } from '../utils'
+import { signAxonTx } from '../ckb/axon'
 
 export const toEthAddress = (addr: string) => {
   const script = addressToScript(addr)
   const hash = utils.computeScriptHash(script)
-  return `0x${keccak256(hash).substring(24)}`
+  return `0x${remove0x(keccak256(hash)).substring(24)}`
 }
 
 export interface AuthData extends AuthResponseData {
@@ -57,12 +60,10 @@ export class JoyIDSigner
 
   async estimateGas(_tx: TransactionRequest): Promise<bigint> {
     return parseUnits('0.14', 'wei')
+    // return this.provider.estimateGas(tx)
   }
 
   async connect(options?: AuthRequest): Promise<JoyIDSigner> {
-    if (this.authData) {
-      return this
-    }
     const res = await authWithPopup({
       redirectURL: location.href,
       ...options,
@@ -78,7 +79,7 @@ export class JoyIDSigner
   }
 
   getAddress() {
-    if (this.authData) {
+    if (this.authData?.ethAddress) {
       return this.authData.ethAddress
     }
     throw new Error('JoyID is not connected.')
@@ -88,7 +89,7 @@ export class JoyIDSigner
     message: string | Uint8Array,
     request?: SignMessageRequest
   ): Promise<SignMessageResponseData> {
-    if (!this.authData) {
+    if (!this.authData?.ethAddress) {
       throw new Error('JoyID is not connected.')
     }
     const isData = typeof message !== 'string'
@@ -128,7 +129,11 @@ export class JoyIDSigner
     }
 
     if (!tx.gasLimit) {
-      tx.gasLimit = await this.estimateGas(tx)
+      tx.gasLimit = 21000
+    }
+
+    if (!tx.gasPrice) {
+      tx.gasPrice = parseUnits('0.000000002', 'ether')
     }
 
     if (!tx.nonce) {
@@ -138,32 +143,56 @@ export class JoyIDSigner
     return tx as TransactionLike<string>
   }
 
-  async signTransaction(tx: TransactionRequest): Promise<string> {
-    // if (tx.nonce && tx.chainId && tx.type && tx.gasLimit) {
-    //   const signedTx = await this._signTransaction()
-    //   return signedTx
-    // }
-    // const populatedTx = await this.populateTransaction(tx)
-    // return pop
-    throw new Error('Method not implemented.')
+  async signTransaction(
+    tx: TransactionRequest,
+    request?: Omit<SignMessageRequest, 'address' | 'challenge'>
+  ): Promise<string> {
+    if (tx.nonce && tx.chainId && tx.type && tx.gasLimit) {
+      const signedTx = await this._signTransaction(tx, request)
+      return signedTx
+    }
+    const populatedTx = await this.populateTransaction(tx)
+    const signedTx = await this._signTransaction(populatedTx, request)
+    return signedTx
   }
 
-  private async _signTransaction() {
-    const lock = this.authData?.address
+  private async _signTransaction(
+    tx: TransactionRequest,
+    request?: Omit<SignMessageRequest, 'address' | 'challenge'>
+  ): Promise<string> {
+    if (!this.authData?.ethAddress) {
+      throw new Error('JoyID is not connected.')
+    }
+
+    const axonTx = new Transaction()
+    if (tx.type != null) axonTx.type = tx.type
+    if (tx.to != null) axonTx.to = tx.to as string
+    if (tx.nonce != null) axonTx.nonce = tx.nonce
+    if (tx.gasLimit != null) axonTx.gasLimit = tx.gasLimit
+    if (tx.gasPrice != null) axonTx.gasPrice = tx.gasPrice
+    if (tx.data != null) axonTx.data = tx.data
+    if (tx.value != null) axonTx.value = tx.value
+    if (tx.chainId != null) axonTx.chainId = tx.chainId
+    if (tx.accessList != null) axonTx.accessList = tx.accessList
+    if (tx.maxFeePerGas != null) axonTx.maxFeePerGas = tx.maxFeePerGas
+    if (tx.maxPriorityFeePerGas != null)
+      axonTx.maxPriorityFeePerGas = tx.maxPriorityFeePerGas
+    const serializedTx = await signAxonTx(axonTx, this.authData)
+    return serializedTx
   }
 
   async sendTransaction(
     tx: TransactionRequest | TransactionLike<string>
   ): Promise<TransactionResponse> {
     if (Object.hasOwn(tx, 'signature')) {
-      return this.provider.send('eth_sendTransaction', [tx])
+      return this.provider.send('eth_sendRawTransaction', [tx])
     }
     const signedTx = await this.signTransaction(tx)
-    return this.provider.send('eth_sendTransaction', [signedTx])
+    return this.provider.send('eth_sendRawTransaction', [signedTx])
   }
 
   async getNonce(_blockTag?: BlockTag | undefined): Promise<number> {
-    if (this.authData) {
+    if (this.authData?.ethAddress) {
       const txCount = await this.provider.getTransactionCount(
         this.authData.ethAddress
       )
