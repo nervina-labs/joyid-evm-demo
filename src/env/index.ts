@@ -10,7 +10,7 @@ export const CKB_INDEXER_URL =
   'https://testnet.ckbapp.dev/indexer'
 
 export const JOY_ID_URL =
-  import.meta.env.VITE_APP_JOY_ID_URL ?? 'https://joyid-dev.vercel.app'
+  import.meta.env.VITE_APP_JOY_ID_URL ?? 'https://app.joyid.dev'
 
 export const JOY_ID_SERVER_URL =
   import.meta.env.VITE_APP_JOY_ID_SERVER_URL ?? 'https://api.internal.joyid.dev'

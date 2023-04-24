@@ -27,15 +27,12 @@
     "vite-plugin-solid": "^2.5.0"
   },
   "dependencies": {
-    "0.1.1": "link:@joyid/core/0.1.1",
     "@ark-ui/solid": "^0.1.0",
     "@ckb-lumos/base": "0.19.0",
     "@ckb-lumos/ckb-indexer": "0.19.0",
     "@ckb-lumos/codec": "0.19.0",
-    "@ckb-lumos/common-scripts": "0.19.0",
     "@ckb-lumos/config-manager": "0.19.0",
     "@ckb-lumos/helpers": "0.19.0",
-    "@ckb-lumos/rpc": "0.19.0",
     "@joyid/core": "0.1.1",
     "@solid-primitives/clipboard": "^1.5.4",
     "@solidjs/router": "0.8.2",

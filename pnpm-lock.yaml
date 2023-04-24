@@ -1,15 +1,12 @@
 lockfileVersion: 5.4
 
 specifiers:
-  0.1.1: link:@joyid/core/0.1.1
   '@ark-ui/solid': ^0.1.0
   '@ckb-lumos/base': 0.19.0
   '@ckb-lumos/ckb-indexer': 0.19.0
   '@ckb-lumos/codec': 0.19.0
-  '@ckb-lumos/common-scripts': 0.19.0
   '@ckb-lumos/config-manager': 0.19.0
   '@ckb-lumos/helpers': 0.19.0
-  '@ckb-lumos/rpc': 0.19.0
   '@joyid/core': 0.1.1
   '@solid-primitives/clipboard': ^1.5.4
   '@solidjs/router': 0.8.2
@@ -37,15 +34,12 @@ specifiers:
   vite-plugin-solid: ^2.5.0
 
 dependencies:
-  0.1.1: link:@joyid/core/0.1.1
   '@ark-ui/solid': 0.1.0_solid-js@1.7.3
   '@ckb-lumos/base': 0.19.0_lroewqn7s5cqnhbb7p6tfz2nwu
   '@ckb-lumos/ckb-indexer': 0.19.0_jsbi@4.3.0
   '@ckb-lumos/codec': 0.19.0
-  '@ckb-lumos/common-scripts': 0.19.0_lroewqn7s5cqnhbb7p6tfz2nwu
   '@ckb-lumos/config-manager': 0.19.0_lroewqn7s5cqnhbb7p6tfz2nwu
   '@ckb-lumos/helpers': 0.19.0_lroewqn7s5cqnhbb7p6tfz2nwu
-  '@ckb-lumos/rpc': 0.19.0_lroewqn7s5cqnhbb7p6tfz2nwu
   '@joyid/core': 0.1.1
   '@solid-primitives/clipboard': 1.5.4_solid-js@1.7.3
   '@solidjs/router': 0.8.2_solid-js@1.7.3
@@ -476,24 +470,6 @@ packages:
     engines: {node: '>=12.0.0'}
     dependencies:
       '@ckb-lumos/bi': 0.19.0
-    dev: false
-
-  /@ckb-lumos/common-scripts/0.19.0_lroewqn7s5cqnhbb7p6tfz2nwu:
-    resolution: {integrity: sha512-ZFAKLhg+5JwqWcc2T587YGljvT4Crrc1gWwZAjCsKIT/nBz7wQVSX1lYFv3DsbZXT4zr5lxM+sgXLx7rDqN2kQ==}
-    engines: {node: '>=12.0.0'}
-    dependencies:
-      '@ckb-lumos/base': 0.19.0_lroewqn7s5cqnhbb7p6tfz2nwu
-      '@ckb-lumos/bi': 0.19.0
-      '@ckb-lumos/codec': 0.19.0
-      '@ckb-lumos/config-manager': 0.19.0_lroewqn7s5cqnhbb7p6tfz2nwu
-      '@ckb-lumos/helpers': 0.19.0_lroewqn7s5cqnhbb7p6tfz2nwu
-      '@ckb-lumos/rpc': 0.19.0_lroewqn7s5cqnhbb7p6tfz2nwu
-      '@ckb-lumos/toolkit': 0.19.0_lroewqn7s5cqnhbb7p6tfz2nwu
-      immutable: 4.3.0
-    transitivePeerDependencies:
-      - cross-fetch
-      - debug
-      - jsbi
     dev: false
 
   /@ckb-lumos/config-manager/0.19.0_lroewqn7s5cqnhbb7p6tfz2nwu:

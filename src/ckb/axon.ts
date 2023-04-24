@@ -39,7 +39,6 @@ import {
   serializedUnsignedTransaction,
 } from '../signer/transaction'
 import { TransactionLike } from 'ethers'
-import { getConfig } from '@ckb-lumos/config-manager/lib'
 
 const { CKBHasher } = utils
 
@@ -118,6 +117,7 @@ function buildSignature(ckbTx: CKBTransaction, lock: Script) {
       ],
     ],
   ]
+
   const rlpSigS = rlpUtils.bytesToHex(RLP.encode(sigS))
 
   const sig = {
@@ -135,10 +135,7 @@ const signCKBTransaction = async (
   keyType: CredentialKeyType,
   alg: SigningAlg
 ) => {
-  const config = getConfig()
-  txSkeleton = prepareSigningEntries(txSkeleton, {
-    config,
-  })
+  txSkeleton = prepareSigningEntries(txSkeleton)
   const isSessionKey =
     keyType === 'main_session_key' || keyType === 'sub_session_key'
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
@@ -165,7 +162,6 @@ const signCKBTransaction = async (
     keyType,
     attestation
   )
-
   const tx = sealTransaction(txSkeleton, [witnessArgLock])
   return tx
 }

@@ -6,7 +6,7 @@ import {
   toBeArray,
   BigNumberish,
   TransactionLike,
-  TransactionRequest,
+  keccak256,
 } from 'ethers'
 
 const BN_0 = BigInt(0)
@@ -106,7 +106,7 @@ function serializeLegacy(tx: TransactionLike<string>, sig?: AxonSignature) {
 export const serializedUnsignedTransaction = (
   tx: TransactionLike<string>
 ): string => {
-  return serializeLegacy(tx)
+  return keccak256(serializeLegacy(tx))
 }
 
 export const serializedSignedTransaction = (
