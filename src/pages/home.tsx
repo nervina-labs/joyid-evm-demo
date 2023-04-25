@@ -8,6 +8,7 @@ import { createQuery } from '@tanstack/solid-query'
 import { useSignerContext } from '../hooks/signer'
 import { formatEther } from 'ethers'
 import { getERC20Balance } from '../erc20'
+import toast from 'solid-toast'
 
 export const Home: Component = () => {
   const logout = useLogout()
@@ -37,6 +38,7 @@ export const Home: Component = () => {
     }
   )
 
+
   return (
     <Show when={authData.ethAddress} fallback={<Navigate href="/" />}>
       <section class="flex-col flex items-center">
@@ -48,10 +50,22 @@ export const Home: Component = () => {
               class="btn btn-xs btn-success btn-outline"
               onClick={() => {
                 writeClipboard(authData.ethAddress)
+                toast.success('Copied Successfully', {
+                  position: 'bottom-center',
+                })
               }}
             >
               Copy Address
             </button>
+          </div>
+          <div class="stat-desc mt-2 text-md">
+            <a
+              class="link"
+              href="https://axon-faucet.internal.joyid.dev"
+              target="_blank"
+            >
+              Claim
+            </a>
           </div>
           <div class="stat-desc mt-2 text-lg">
             <Switch>
