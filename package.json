@@ -27,7 +27,6 @@
     "vite-plugin-solid": "^2.5.0"
   },
   "dependencies": {
-    "@ark-ui/solid": "^0.1.0",
     "@ckb-lumos/base": "0.19.0",
     "@ckb-lumos/ckb-indexer": "0.19.0",
     "@ckb-lumos/codec": "0.19.0",
@@ -42,6 +41,7 @@
     "jsbi": "^4.3.0",
     "lucide-solid": "^0.162.0",
     "rlp": "^3.0.0",
-    "solid-js": "1.7.3"
+    "solid-js": "1.7.3",
+    "solid-toast": "^0.5.0"
   }
 }

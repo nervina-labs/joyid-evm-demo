@@ -28,3 +28,7 @@ export const COTA_AGGREGATOR_URL = 'https://cota-testnet.nervina.dev/aggregator'
 export const COTA_TYPE_SCRIPT_CODE_HASH =
   import.meta.env.VITE_APP_COTA_TYPE_SCRIPT_CODE_HASH ??
   '0x89cd8003a0eaf8e65e0c31525b7d1d5c1becefd2ea75bb4cff87810ae37764d8'
+
+export const EXPLORER_URL =
+  import.meta.env.VITE_APP_EXPLORER_URL ??
+  'https://axon-explorer.internal.joyid.dev'

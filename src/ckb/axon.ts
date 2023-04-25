@@ -82,11 +82,11 @@ function buildWitnessArgLock(
   return `0x${mode}${pubkey}${signature}${message}`
 }
 
-const hexToBytes = bytes.bytify
+const toBuffer = (input: string) => bytes.bytify(input)
 
 function buildNestedArray(cellDeps: CellDep[]) {
   return cellDeps.map((cellDep) => [
-    hexToBytes(cellDep.outPoint.txHash),
+    toBuffer(cellDep.outPoint.txHash),
     parseInt(cellDep.outPoint.index, 16),
     cellDep.outPoint.txHash === joyidScriptConfig.TX_HASH ? 1 : 0,
   ])
@@ -95,30 +95,24 @@ function buildNestedArray(cellDeps: CellDep[]) {
 function buildSignature(ckbTx: CKBTransaction, lock: Script) {
   const { cellDeps, witnesses } = ckbTx
   const witnessArgs = blockchain.WitnessArgs.unpack(bytes.bytify(witnesses[0]))
+
   const sigR = [
     buildNestedArray(cellDeps),
     [],
-    [[], [hexToBytes(lock.codeHash), hexToBytes(lock.args), 1], '0x'],
+    [[], [toBuffer(lock.codeHash), toBuffer(lock.args), 1], '0x'],
     [0, 0],
   ]
-  const rlpSigR = rlpUtils.bytesToHex(
+  const rlpSigR = bytes.hexify(
     rlpUtils.concatBytes(new Uint8Array([2]), RLP.encode(sigR))
   )
-  const sigS = [
-    [
-      [
-        [witnessArgs.lock ? hexToBytes(witnessArgs.lock) : new Uint8Array()],
-        [],
-        [
-          witnessArgs.outputType
-            ? hexToBytes(witnessArgs.outputType)
-            : new Uint8Array(),
-        ],
-      ],
-    ],
-  ]
+  const outputTypeData = []
+  if (witnessArgs.outputType) {
+    outputTypeData.push(toBuffer(witnessArgs.outputType))
+  }
 
-  const rlpSigS = rlpUtils.bytesToHex(RLP.encode(sigS))
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const sigS = [[[[toBuffer(witnessArgs.lock!)], [], outputTypeData]]]
+  const rlpSigS = bytes.hexify(RLP.encode(sigS))
 
   const sig = {
     r: append0x(rlpSigR),
@@ -234,6 +228,7 @@ export const signAxonTx = async (
     for await (const cell of collector.collect()) {
       cotaCells.push(cell)
     }
+    console.log(cotaCells)
 
     const cotaCellOutPoint = cotaCells?.[0].outPoint
     if (cotaCellOutPoint == null) {

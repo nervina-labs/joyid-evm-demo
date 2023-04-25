@@ -49,7 +49,8 @@ function hashWitness(
 }
 
 export function prepareSigningEntries(
-  txSkeleton: TransactionSkeletonType
+  txSkeleton: TransactionSkeletonType,
+  ignoredOutputsData = true
 ): TransactionSkeletonType {
   const template = joyidScriptConfig
   if (!template) {
@@ -58,6 +59,9 @@ export function prepareSigningEntries(
   let processedArgs = new Set<string>()
 
   const tx = createTransactionFromSkeleton(txSkeleton)
+  if (ignoredOutputsData) {
+    tx.outputsData = []
+  }
   const txHash = ckbHash(blockchain.RawTransaction.pack(tx))
   const inputs = txSkeleton.get('inputs')
   const witnesses = txSkeleton.get('witnesses')
