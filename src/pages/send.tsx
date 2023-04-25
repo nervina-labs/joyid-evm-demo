@@ -5,7 +5,7 @@ import { Component, Show, createSignal } from 'solid-js'
 import { useSignerContext } from '../hooks/signer'
 import { useAuthData } from '../hooks/localStorage'
 import { parseEther } from 'ethers'
-import { EXPLORER_URL } from '../env'
+import { useSendSuccessToast } from '../hooks/useSendSuccessToast'
 
 export const SendEth: Component = () => {
   const [toAddress, setToAddress] = createSignal(
@@ -16,6 +16,7 @@ export const SendEth: Component = () => {
   const signer = useSignerContext()
   const { authData } = useAuthData()
   const [isLoading, setIsLoading] = createSignal(false)
+  const successToast = useSendSuccessToast()
 
   const onSend = async () => {
     setIsLoading(true)
@@ -26,49 +27,14 @@ export const SendEth: Component = () => {
         from: authData.ethAddress,
         value: parseEther(amount()),
       })
-      toast.custom(
-        () => {
-          return (
-            <div class="alert alert-success shadow-lg max-w-md">
-              <div>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="stroke-current flex-shrink-0 h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                <div class="flex-col flex">
-                  <span>Transaction Sent. View on:</span>
-                  <a
-                    class="link break-all"
-                    href={`${EXPLORER_URL}/tx/${tx}`}
-                    target="_blank"
-                  >
-                    {tx as any}
-                  </a>
-                </div>
-              </div>
-            </div>
-          )
-        },
-        {
-          position: 'bottom-center',
-          duration: 10000,
-        }
-      )
+      successToast(tx as any)
     } catch (error) {
       const formattedError =
         error instanceof Error ? error.message : JSON.stringify(error)
       toast.error(<div class="break-all">{formattedError}</div>, {
         position: 'bottom-center',
         duration: 5000,
+        unmountDelay: 0,
       })
       console.log(error)
       //
