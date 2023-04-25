@@ -104,7 +104,7 @@ export const SendEth: Component = () => {
                 value={amount()}
                 onInput={(e) => setAmount(e.target.value)}
               />
-              <span>ETH</span>
+              <span>AXON</span>
             </label>
           </div>
           <button

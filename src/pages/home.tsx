@@ -7,12 +7,13 @@ import { truncateMiddle } from '../utils'
 import { createQuery } from '@tanstack/solid-query'
 import { useSignerContext } from '../hooks/signer'
 import { formatEther } from 'ethers'
+import { getERC20Balance } from '../erc20'
 
 export const Home: Component = () => {
   const logout = useLogout()
   const { authData } = useAuthData()
   const signer = useSignerContext()
-  const query = createQuery(
+  const queryAXON = createQuery(
     () => ['balance', authData.ethAddress],
     () => {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -24,11 +25,23 @@ export const Home: Component = () => {
     }
   )
 
+  const queryERC20 = createQuery(
+    () => ['erc20-balance', authData.ethAddress],
+    () => {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      return getERC20Balance(authData.ethAddress, signer!.provider)
+    },
+    {
+      retry: 3,
+      enabled: !!authData.ethAddress,
+    }
+  )
+
   return (
     <Show when={authData.ethAddress} fallback={<Navigate href="/" />}>
       <section class="flex-col flex items-center">
         <div class="stat">
-          <div class="stat-title">ETH Account</div>
+          <div class="stat-title">AXON Account</div>
           <div class="stat-value">{truncateMiddle(authData.ethAddress)}</div>
           <div class="stat-actions mt-2">
             <button
@@ -42,9 +55,17 @@ export const Home: Component = () => {
           </div>
           <div class="stat-desc mt-2 text-lg">
             <Switch>
-              <Match when={query.isLoading}>...</Match>
-              <Match when={query.isSuccess}>
-                {`${formatEther(query.data!.toString())} ETH`}
+              <Match when={queryAXON.isLoading}>...</Match>
+              <Match when={queryAXON.isSuccess}>
+                {`${formatEther(queryAXON.data!.toString())} AXON`}
+              </Match>
+            </Switch>
+          </div>
+          <div class="stat-desc mt-2 text-lg">
+            <Switch>
+              <Match when={queryERC20.isLoading}>...</Match>
+              <Match when={queryERC20.isSuccess}>
+                {`${formatEther(queryERC20.data!.toString())} ERC20`}
               </Match>
             </Switch>
           </div>
@@ -54,7 +75,7 @@ export const Home: Component = () => {
           <button class="btn btn-wide mt-8">Sign Message</button>
         </A>
         <A href="/send">
-          <button class="btn btn-wide mt-8">Send ETH</button>
+          <button class="btn btn-wide mt-8">Send AXON</button>
         </A>
         <A href="/send-erc20">
           <button class="btn btn-wide mt-8">Send ERC20</button>
