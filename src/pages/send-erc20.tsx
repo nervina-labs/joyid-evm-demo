@@ -4,9 +4,10 @@ import toast from 'solid-toast'
 import { Component, Show, createSignal } from 'solid-js'
 import { useSignerContext } from '../hooks/signer'
 import { useAuthData } from '../hooks/localStorage'
-import { buildERC20Data } from '../erc20'
+import { buildERC20Data, getERC20Balance } from '../erc20'
 import { useSendSuccessToast } from '../hooks/useSendSuccessToast'
-import { parseUnits } from 'ethers'
+import { parseEther, parseUnits } from 'ethers'
+import { createQuery } from '@tanstack/solid-query'
 
 const JOY_ERC20_CONTRACT_ADDRESS = '0xeF4489740eae514ed2E2FDe224aa054C606e3549'
 
@@ -28,7 +29,28 @@ export const SendERC20: Component = () => {
     setAmount('0.01')
     setContractAddress(JOY_ERC20_CONTRACT_ADDRESS)
   }
+
+  const queryERC20 = createQuery(
+    () => ['erc20-balance', authData.ethAddress],
+    () => {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      return getERC20Balance(authData.ethAddress, signer!.provider)
+    },
+    {
+      retry: 3,
+      enabled: !!authData.ethAddress,
+    }
+  )
+
   const onSend = async () => {
+    const balance = parseEther(queryERC20.data?.toString() || '0')
+    if (balance < parseEther(amount())) {
+      toast.error('Insufficient balance', {
+        position: 'bottom-center',
+      })
+      // eslint-disable-next-line solid/components-return-once
+      return
+    }
     setIsLoading(true)
     try {
       // debugger
@@ -104,7 +126,7 @@ export const SendERC20: Component = () => {
           <button
             class="btn btn-wide btn-primary mt-12"
             onClick={onSend}
-            classList={{ loading: isLoading() }}
+            classList={{ loading: isLoading() || queryERC20.isLoading }}
           >
             Send
           </button>

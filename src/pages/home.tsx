@@ -38,7 +38,6 @@ export const Home: Component = () => {
     }
   )
 
-
   return (
     <Show when={authData.ethAddress} fallback={<Navigate href="/" />}>
       <section class="flex-col flex items-center">
