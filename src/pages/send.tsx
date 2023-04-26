@@ -17,6 +17,10 @@ export const SendEth: Component = () => {
   const { authData } = useAuthData()
   const [isLoading, setIsLoading] = createSignal(false)
   const successToast = useSendSuccessToast()
+  const onReset = () => {
+    setToAddress('0xA6eBeCE9938C3e1757bE3024D2296666d6F8Fc49')
+    setAmount('0.01')
+  }
 
   const onSend = async () => {
     setIsLoading(true)
@@ -80,7 +84,10 @@ export const SendEth: Component = () => {
           >
             Send
           </button>
-          <button class="btn btn-wide btn-outline btn-secondary mt-8">
+          <button
+            class="btn btn-wide btn-outline btn-secondary mt-8"
+            onClick={onReset}
+          >
             Reset
           </button>
           <button

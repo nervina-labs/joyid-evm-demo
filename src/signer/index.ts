@@ -129,7 +129,7 @@ export class JoyIDSigner
     }
 
     if (!tx.gasLimit) {
-      tx.gasLimit = 21000
+      tx.gasLimit = 50000
     }
 
     if (!tx.gasPrice) {
