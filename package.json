@@ -33,6 +33,7 @@
     "@ckb-lumos/config-manager": "0.19.0",
     "@ckb-lumos/helpers": "0.19.0",
     "@joyid/core": "0.1.1",
+    "@joyid/evm": "0.0.3",
     "@solid-primitives/clipboard": "^1.5.4",
     "@solidjs/router": "0.8.2",
     "@tanstack/solid-query": "^4.29.1",

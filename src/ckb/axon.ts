@@ -308,5 +308,6 @@ export const signAxonTx = async (
 
   const sig = buildSignature(ckbTx, lock)
 
-  return serializedSignedTransaction(axonTx, sig)
+  const tx = serializedSignedTransaction(axonTx, sig)
+  return tx
 }

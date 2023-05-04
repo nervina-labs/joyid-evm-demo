@@ -1,6 +1,7 @@
 import { Component, Show, createSignal } from 'solid-js'
 import { useSignerContext } from '../hooks/signer'
 import { Navigate, useNavigate } from '@solidjs/router'
+import { connect } from '@joyid/evm'
 import { useAuthData } from '../hooks/localStorage'
 
 export const Root: Component = () => {
@@ -14,10 +15,10 @@ export const Root: Component = () => {
       return
     }
     try {
-      await signer.connect()
-      const authData = signer.getAuthData()
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      setAuthData(authData!)
+      const authData = await connect()
+      setAuthData({
+        ...authData,
+      })
       navi('/home')
     } catch (error) {
       console.log(error)

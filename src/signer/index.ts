@@ -129,7 +129,7 @@ export class JoyIDSigner
     }
 
     if (!tx.gasLimit) {
-      tx.gasLimit = 50000
+      tx.gasLimit = parseUnits('80000', 'wei')
     }
 
     if (!tx.gasPrice) {
@@ -153,6 +153,8 @@ export class JoyIDSigner
     }
     const populatedTx = await this.populateTransaction(tx)
     const signedTx = await this._signTransaction(populatedTx, request)
+    console.log(signedTx)
+    throw new Error('fuck')
     return signedTx
   }
 

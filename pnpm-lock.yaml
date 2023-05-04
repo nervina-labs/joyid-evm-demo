@@ -7,6 +7,7 @@ specifiers:
   '@ckb-lumos/config-manager': 0.19.0
   '@ckb-lumos/helpers': 0.19.0
   '@joyid/core': 0.1.1
+  '@joyid/evm': 0.0.3
   '@solid-primitives/clipboard': ^1.5.4
   '@solidjs/router': 0.8.2
   '@tanstack/solid-query': ^4.29.1
@@ -40,6 +41,7 @@ dependencies:
   '@ckb-lumos/config-manager': 0.19.0_lroewqn7s5cqnhbb7p6tfz2nwu
   '@ckb-lumos/helpers': 0.19.0_lroewqn7s5cqnhbb7p6tfz2nwu
   '@joyid/core': 0.1.1
+  '@joyid/evm': 0.0.3
   '@solid-primitives/clipboard': 1.5.4_solid-js@1.7.3
   '@solidjs/router': 0.8.2_solid-js@1.7.3
   '@tanstack/solid-query': 4.29.1_solid-js@1.7.3
@@ -753,6 +755,10 @@ packages:
       node-fetch: 2.6.9
     transitivePeerDependencies:
       - encoding
+    dev: false
+
+  /@joyid/evm/0.0.3:
+    resolution: {integrity: sha512-o6panp86TyrwlH3Rma1GM5nD7Yqn5b/qzyl4Xd48fH7qjRryEIq6fZ/DrEp7bfHxCViZ88Z+SeImEf1T/kbVTA==}
     dev: false
 
   /@jridgewell/gen-mapping/0.1.1:

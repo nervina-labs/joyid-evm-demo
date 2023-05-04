@@ -4,6 +4,14 @@ import { Toaster } from 'solid-toast'
 import { QueryClient, QueryClientProvider } from '@tanstack/solid-query'
 import { routes } from './routes'
 import { SignerProvider } from './hooks/signer'
+import { initConfig } from '@joyid/evm'
+import { JOY_ID_URL } from './env'
+
+initConfig({
+  name: 'JoyID EVM Demo',
+  logo: 'https://fav.farm/🆔',
+  joyidAppURL: JOY_ID_URL,
+})
 
 const qc = new QueryClient()
 
