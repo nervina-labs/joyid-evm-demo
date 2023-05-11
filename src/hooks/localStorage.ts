@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { createEffect } from 'solid-js'
 import { createStore, produce, SetStoreFunction, Store } from 'solid-js/store'
-import { AuthData } from '../signer'
+import { ConnectResponseData as AuthData } from '@joyid/ethers'
 
 export function createLocalStore<T extends object>(
   name: string,

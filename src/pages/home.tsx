@@ -5,20 +5,20 @@ import { A, Navigate } from '@solidjs/router'
 import { useAuthData, useLogout } from '../hooks/localStorage'
 import { truncateMiddle } from '../utils'
 import { createQuery } from '@tanstack/solid-query'
-import { useSignerContext } from '../hooks/signer'
-import { formatEther } from 'ethers'
+import { useJoyIDProviderContext } from '../hooks/joyidProvider'
+import { formatEther } from 'ethers/lib/utils'
 import { getERC20Balance } from '../erc20'
 import toast from 'solid-toast'
 
 export const Home: Component = () => {
   const logout = useLogout()
   const { authData } = useAuthData()
-  const signer = useSignerContext()
+  const provider = useJoyIDProviderContext()
   const queryAXON = createQuery(
     () => ['balance', authData.ethAddress],
     () => {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      return signer!.provider.getBalance(authData.ethAddress)
+      return provider!.getBalance(authData.ethAddress)
     },
     {
       retry: 3,
@@ -30,7 +30,7 @@ export const Home: Component = () => {
     () => ['erc20-balance', authData.ethAddress],
     () => {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      return getERC20Balance(authData.ethAddress, signer!.provider)
+      return getERC20Balance(authData.ethAddress, provider!)
     },
     {
       retry: 3,

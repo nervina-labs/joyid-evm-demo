@@ -1,9 +1,13 @@
-import { Provider, ethers, parseEther, Interface, getAddress } from 'ethers'
+import { providers, ethers } from 'ethers'
+import { parseEther, Interface, getAddress } from 'ethers/lib/utils'
 import ERC20_ABI from './abi.json'
 
 const JOY_ERC20_CONTRACT_ADDRESS = '0xeF4489740eae514ed2E2FDe224aa054C606e3549'
 
-export const getERC20Balance = async (address: string, provider: Provider) => {
+export const getERC20Balance = async (
+  address: string,
+  provider: providers.JsonRpcProvider
+) => {
   const contract = new ethers.Contract(
     JOY_ERC20_CONTRACT_ADDRESS,
     ERC20_ABI,

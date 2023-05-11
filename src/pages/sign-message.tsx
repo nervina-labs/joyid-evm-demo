@@ -1,7 +1,7 @@
 import { Navigate, useNavigate } from '@solidjs/router'
 import { Component, Show, createSignal } from 'solid-js'
 import { useAuthData } from '../hooks/localStorage'
-import { useSignerContext } from '../hooks/signer'
+import { useJoyIDProviderContext } from '../hooks/joyidProvider'
 import { SignMessageResponseData, verifySignature } from '@joyid/core'
 
 export const SignMessage: Component = () => {
@@ -11,17 +11,18 @@ export const SignMessage: Component = () => {
     createSignal<SignMessageResponseData | null>(null)
   const navi = useNavigate()
   const { authData } = useAuthData()
-  const signer = useSignerContext()
+  const provider = useJoyIDProviderContext()
 
-  const signMessage = async () => {
-    const res = await signer?.signMessage(challenge())
+  const onSignMessage = async () => {
+    const signer = provider.getSigner(authData.ethAddress)
+    const res = await signer.signChallenge(challenge())
     if (res) {
       setSignature(res.signature)
       setSignedData(res)
     }
   }
 
-  const verifyMessage = async () => {
+  const onVerifyMessage = async () => {
     const data = signedData()
     if (data) {
       const res = await verifySignature(data)
@@ -61,13 +62,13 @@ export const SignMessage: Component = () => {
             </details>
           </div>
         </Show>
-        <button class="btn btn-wide btn-primary mt-12" onClick={signMessage}>
+        <button class="btn btn-wide btn-primary mt-12" onClick={onSignMessage}>
           Sign Message
         </button>
         <button
           class="btn btn-wide btn-outline btn-secondary mt-8"
           disabled={signature().length === 0}
-          onClick={verifyMessage}
+          onClick={onVerifyMessage}
         >
           Verify Message
         </button>
