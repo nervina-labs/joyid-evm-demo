@@ -2,6 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@joyid/core': ^0.1.1
+  '@joyid/ethers': ^0.0.1
   '@solid-primitives/clipboard': ^1.5.4
   '@solidjs/router': 0.8.2
   '@tanstack/solid-query': ^4.29.1
@@ -28,6 +29,7 @@ specifiers:
 
 dependencies:
   '@joyid/core': 0.1.1
+  '@joyid/ethers': 0.0.1_ethers@5.7.0
   '@solid-primitives/clipboard': 1.5.4_solid-js@1.7.3
   '@solidjs/router': 0.8.2_solid-js@1.7.3
   '@tanstack/solid-query': 4.29.1_solid-js@1.7.3
@@ -947,6 +949,14 @@ packages:
       node-fetch: 2.6.9
     transitivePeerDependencies:
       - encoding
+    dev: false
+
+  /@joyid/ethers/0.0.1_ethers@5.7.0:
+    resolution: {integrity: sha512-flY0vQLFoH6cSvsby96VtaGEXtw7+o+pD7r8uZFYoDbjB0cUzdUJrSF4vzesqw5DK5r/am08Z7piqAdgZrCkrw==}
+    peerDependencies:
+      ethers: ^5.0.0
+    dependencies:
+      ethers: 5.7.0
     dev: false
 
   /@jridgewell/gen-mapping/0.1.1:
