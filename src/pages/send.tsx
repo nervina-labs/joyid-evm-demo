@@ -2,9 +2,9 @@
 import { Navigate, useNavigate } from '@solidjs/router'
 import toast from 'solid-toast'
 import { Component, Show, createSignal } from 'solid-js'
-import { useSignerContext } from '../hooks/signer'
+import { useJoyIDProviderContext } from '../hooks/joyidProvider'
 import { useAuthData } from '../hooks/localStorage'
-import { parseEther } from 'ethers'
+import { parseEther } from 'ethers/lib/utils'
 import { useSendSuccessToast } from '../hooks/useSendSuccessToast'
 
 export const SendEth: Component = () => {
@@ -13,7 +13,7 @@ export const SendEth: Component = () => {
   )
   const [amount, setAmount] = createSignal('0.01')
   const navi = useNavigate()
-  const signer = useSignerContext()
+  const provider = useJoyIDProviderContext()
   const { authData } = useAuthData()
   const [isLoading, setIsLoading] = createSignal(false)
   const successToast = useSendSuccessToast()
@@ -25,13 +25,14 @@ export const SendEth: Component = () => {
   const onSend = async () => {
     setIsLoading(true)
     try {
-      // debugger
-      const tx = await signer!.sendTransaction({
+      const signer = provider.getSigner(authData.ethAddress)
+      const tx = await signer.sendTransaction({
         to: toAddress(),
         from: authData.ethAddress,
-        value: parseEther(amount()),
+        value: parseEther(amount()).toString(),
+        chainId: 2022,
       })
-      successToast(tx as any)
+      successToast(tx.hash)
     } catch (error) {
       const formattedError =
         error instanceof Error ? error.message : JSON.stringify(error)

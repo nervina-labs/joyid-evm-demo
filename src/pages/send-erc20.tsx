@@ -2,11 +2,11 @@
 import { Navigate, useNavigate } from '@solidjs/router'
 import toast from 'solid-toast'
 import { Component, Show, createSignal } from 'solid-js'
-import { useSignerContext } from '../hooks/signer'
+import { useJoyIDProviderContext } from '../hooks/joyidProvider'
 import { useAuthData } from '../hooks/localStorage'
 import { buildERC20Data, getERC20Balance } from '../erc20'
 import { useSendSuccessToast } from '../hooks/useSendSuccessToast'
-import { parseEther, parseUnits } from 'ethers'
+import { parseEther } from 'ethers/lib/utils'
 import { createQuery } from '@tanstack/solid-query'
 
 const JOY_ERC20_CONTRACT_ADDRESS = '0xeF4489740eae514ed2E2FDe224aa054C606e3549'
@@ -20,7 +20,7 @@ export const SendERC20: Component = () => {
     JOY_ERC20_CONTRACT_ADDRESS
   )
   const navi = useNavigate()
-  const signer = useSignerContext()
+  const provider = useJoyIDProviderContext()
   const { authData } = useAuthData()
   const [isLoading, setIsLoading] = createSignal(false)
   const sendSuccessToast = useSendSuccessToast()
@@ -34,7 +34,7 @@ export const SendERC20: Component = () => {
     () => ['erc20-balance', authData.ethAddress],
     () => {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      return getERC20Balance(authData.ethAddress, signer!.provider)
+      return getERC20Balance(authData.ethAddress, provider)
     },
     {
       retry: 3,
@@ -53,16 +53,16 @@ export const SendERC20: Component = () => {
     }
     setIsLoading(true)
     try {
-      // debugger
-      const tx = await signer!.sendTransaction({
+      const signer = provider!.getSigner(authData.ethAddress)
+      const tx = await signer.sendTransaction({
         to: contractAddress(),
         from: authData.ethAddress,
-        value: 0,
+        value: '0',
         data: buildERC20Data(toAddress(), amount()),
-        gasPrice: parseUnits('0.66', 'gwei'),
-        gasLimit: 100000,
+        chainId: 2022,
       })
-      sendSuccessToast(tx as any)
+
+      sendSuccessToast(tx.hash)
     } catch (error) {
       const formattedError =
         error instanceof Error ? error.message : JSON.stringify(error)
