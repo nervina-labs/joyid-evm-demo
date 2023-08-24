@@ -2,18 +2,18 @@
 import { Component, Match, Show, Switch } from 'solid-js'
 import { writeClipboard } from '@solid-primitives/clipboard'
 import { A, Navigate } from '@solidjs/router'
+import toast from 'solid-toast'
 import { useAuthData, useLogout } from '../hooks/localStorage'
 import { truncateMiddle } from '../utils'
 import { createQuery } from '@tanstack/solid-query'
-import { useJoyIDProviderContext } from '../hooks/joyidProvider'
 import { formatEther } from 'ethers/lib/utils'
 import { getERC20Balance } from '../erc20'
-import toast from 'solid-toast'
+import { createProvider } from '../hooks/provider'
 
 export const Home: Component = () => {
   const logout = useLogout()
   const { authData } = useAuthData()
-  const provider = useJoyIDProviderContext()
+  const provider = createProvider()
   const queryAXON = createQuery(
     () => ['balance', authData.ethAddress],
     () => {
@@ -42,7 +42,7 @@ export const Home: Component = () => {
     <Show when={authData.ethAddress} fallback={<Navigate href="/" />}>
       <section class="flex-col flex items-center">
         <div class="stat">
-          <div class="stat-title">AXON Account</div>
+          <div class="stat-title">EVM Account</div>
           <div class="stat-value">{truncateMiddle(authData.ethAddress)}</div>
           <div class="stat-actions mt-2">
             <button
@@ -60,7 +60,7 @@ export const Home: Component = () => {
           <div class="stat-desc mt-2 text-md">
             <a
               class="link"
-              href="https://axon-faucet.internal.joyid.dev"
+              href="https://sepoliafaucet.com/"
               target="_blank"
             >
               Claim
@@ -70,7 +70,7 @@ export const Home: Component = () => {
             <Switch>
               <Match when={queryAXON.isLoading}>...</Match>
               <Match when={queryAXON.isSuccess}>
-                {`${formatEther(queryAXON.data!.toString())} AXON`}
+                {`${formatEther(queryAXON.data!.toString())} ETH`}
               </Match>
             </Switch>
           </div>
@@ -78,7 +78,7 @@ export const Home: Component = () => {
             <Switch>
               <Match when={queryERC20.isLoading}>...</Match>
               <Match when={queryERC20.isSuccess}>
-                {`${formatEther(queryERC20.data!.toString())} ERC20`}
+                {`${queryERC20?.data?.div(10 ** 6).toString()} ERC20`}
               </Match>
             </Switch>
           </div>
@@ -88,7 +88,7 @@ export const Home: Component = () => {
           <button class="btn btn-wide mt-8">Sign Message</button>
         </A>
         <A href="/send">
-          <button class="btn btn-wide mt-8">Send AXON</button>
+          <button class="btn btn-wide mt-8">Send ETH</button>
         </A>
         <A href="/send-erc20">
           <button class="btn btn-wide mt-8">Send ERC20</button>

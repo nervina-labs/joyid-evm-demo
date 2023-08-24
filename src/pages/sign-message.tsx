@@ -1,32 +1,30 @@
 import { Navigate, useNavigate } from '@solidjs/router'
 import { Component, Show, createSignal } from 'solid-js'
+import toast from 'solid-toast'
+import { verifyMessage } from 'ethers/lib.esm/utils'
+import { signMessage } from '@joyid/evm'
 import { useAuthData } from '../hooks/localStorage'
-import { useJoyIDProviderContext } from '../hooks/joyidProvider'
-import { SignMessageResponseData, verifySignature } from '@joyid/core'
 
 export const SignMessage: Component = () => {
   const [challenge, setChallenge] = createSignal('Hello World')
   const [signature, setSignature] = createSignal('')
-  const [signedData, setSignedData] =
-    createSignal<SignMessageResponseData | null>(null)
   const navi = useNavigate()
   const { authData } = useAuthData()
-  const provider = useJoyIDProviderContext()
 
   const onSignMessage = async () => {
-    const signer = provider.getSigner(authData.ethAddress)
-    const res = await signer.signChallenge(challenge())
-    if (res) {
-      setSignature(res.signature)
-      setSignedData(res)
-    }
+    const sig = await signMessage(challenge(), authData.ethAddress)
+    setSignature(sig)
   }
 
-  const onVerifyMessage = async () => {
-    const data = signedData()
-    if (data) {
-      const res = await verifySignature(data)
-      alert(res)
+  const onVerifyMessage = () => {
+    try {
+      const res = verifyMessage(challenge(), signature())
+      alert(!!res)
+    } catch (error) {
+      console.log(error)
+      toast.error(
+        error instanceof Error ? error.message : JSON.stringify(error)
+      )
     }
   }
 
@@ -50,18 +48,6 @@ export const SignMessage: Component = () => {
             disabled
           />
         </div>
-        <Show when={signedData() !== null}>
-          <div class="w-80 mt-8">
-            <details>
-              <summary>More Details</summary>
-              <pre>
-                <code class="whitespace-pre-wrap break-words">
-                  {JSON.stringify(signedData(), null, 4)}
-                </code>
-              </pre>
-            </details>
-          </div>
-        </Show>
         <button class="btn btn-wide btn-primary mt-12" onClick={onSignMessage}>
           Sign Message
         </button>

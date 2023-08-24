@@ -18,18 +18,3 @@ export function append0x(s: string) {
   }
   return `0x${s}`
 }
-
-export function hexToArrayBuffer(input: string): ArrayBuffer {
-  const view = new Uint8Array(input.length / 2)
-  for (let i = 0; i < input.length; i += 2) {
-    view[i / 2] = parseInt(input.substring(i, i + 2), 16)
-  }
-
-  return view.buffer
-}
-
-export function bufferToHex(buffer: ArrayBuffer) {
-  return [...new Uint8Array(buffer)]
-    .map((b) => b.toString(16).padStart(2, '0'))
-    .join('')
-}

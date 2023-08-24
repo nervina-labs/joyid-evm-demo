@@ -2,37 +2,36 @@
 import { Navigate, useNavigate } from '@solidjs/router'
 import toast from 'solid-toast'
 import { Component, Show, createSignal } from 'solid-js'
-import { useJoyIDProviderContext } from '../hooks/joyidProvider'
+import { signTransaction } from '@joyid/evm'
+import { createProvider } from '../hooks/provider'
 import { useAuthData } from '../hooks/localStorage'
 import { parseEther } from 'ethers/lib/utils'
 import { useSendSuccessToast } from '../hooks/useSendSuccessToast'
+import { DEFAULT_SEND_ADDRESS } from '../constant'
 
 export const SendEth: Component = () => {
-  const [toAddress, setToAddress] = createSignal(
-    '0xA6eBeCE9938C3e1757bE3024D2296666d6F8Fc49'
-  )
+  const [toAddress, setToAddress] = createSignal(DEFAULT_SEND_ADDRESS)
   const [amount, setAmount] = createSignal('0.01')
   const navi = useNavigate()
-  const provider = useJoyIDProviderContext()
+  const provider = createProvider()
   const { authData } = useAuthData()
   const [isLoading, setIsLoading] = createSignal(false)
   const successToast = useSendSuccessToast()
   const onReset = () => {
-    setToAddress('0xA6eBeCE9938C3e1757bE3024D2296666d6F8Fc49')
+    setToAddress(DEFAULT_SEND_ADDRESS)
     setAmount('0.01')
   }
 
   const onSend = async () => {
     setIsLoading(true)
     try {
-      const signer = provider.getSigner(authData.ethAddress)
-      const tx = await signer.sendTransaction({
+      const tx = await signTransaction({
         to: toAddress(),
         from: authData.ethAddress,
         value: parseEther(amount()).toString(),
-        chainId: 2022,
       })
-      successToast(tx.hash)
+      const txRes = await provider.sendTransaction(tx)
+      successToast(txRes.hash)
     } catch (error) {
       const formattedError =
         error instanceof Error ? error.message : JSON.stringify(error)
@@ -50,7 +49,7 @@ export const SendEth: Component = () => {
 
   return (
     <>
-      <Show when={authData.address} fallback={<Navigate href="/" />}>
+      <Show when={authData.ethAddress} fallback={<Navigate href="/" />}>
         <section class="flex-col flex items-center">
           <div class="form-control w-80">
             <label class="label">
@@ -70,12 +69,11 @@ export const SendEth: Component = () => {
             <label class="input-group">
               <input
                 type="number"
-                placeholder="0.01"
                 class="input input-bordered w-full"
                 value={amount()}
                 onInput={(e) => setAmount(e.target.value)}
               />
-              <span>AXON</span>
+              <span>ETH</span>
             </label>
           </div>
           <button
