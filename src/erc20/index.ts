@@ -1,5 +1,5 @@
 import { providers, ethers, BigNumber } from 'ethers'
-import { parseEther, Interface, getAddress } from 'ethers/lib/utils'
+import { Interface, getAddress } from 'ethers/lib/utils'
 import ERC20_ABI from './abi.json'
 import { DEFAULT_ERC20_CONTRACT_ADDRESS } from '../constant'
 

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { createEffect } from 'solid-js'
 import { createStore, produce, SetStoreFunction, Store } from 'solid-js/store'
+import { Chain } from '../chains'
 
 export function createLocalStore<T extends object>(
   name: string,
@@ -18,10 +19,9 @@ export function createLocalStore<T extends object>(
 
 export const EMPTY_OBJECT = Object.create(null)
 
-const [authData, setAuthData] = createLocalStore<{ ethAddress: string }>(
-  'demo:auth-data',
-  EMPTY_OBJECT
-)
+const [authData, setAuthData] = createLocalStore<
+  { ethAddress: string } & Chain
+>('demo:auth-data:1', EMPTY_OBJECT)
 
 export function useAuthData() {
   const isAuthcated = Object.keys(authData).length > 0

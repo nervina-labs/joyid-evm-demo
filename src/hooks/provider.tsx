@@ -1,14 +1,15 @@
 import { providers } from 'ethers'
-import { SEPOLIA_RPC_URL } from '../env'
+import { useAuthData } from './localStorage'
 
 export const SepoliaNetwork = {
-  name: 'sepolia',
+  name: 'Ethereum Sepolia',
   chainId: 11155111,
 }
 
-export const createProvider = (
-  rpcURL: string = SEPOLIA_RPC_URL,
-  network = SepoliaNetwork
-) => {
-  return new providers.JsonRpcBatchProvider(rpcURL, network)
+export const useProvider = () => {
+  const { authData } = useAuthData()
+  return new providers.JsonRpcBatchProvider(authData.rpcURL, {
+    name: authData.name,
+    chainId: authData.chainId,
+  })
 }

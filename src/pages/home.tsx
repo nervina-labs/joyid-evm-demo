@@ -8,14 +8,15 @@ import { truncateMiddle } from '../utils'
 import { createQuery } from '@tanstack/solid-query'
 import { formatEther } from 'ethers/lib/utils'
 import { getERC20Balance } from '../erc20'
-import { createProvider } from '../hooks/provider'
+import { useProvider } from '../hooks/provider'
+import { EthSepolia } from '../chains'
 
 export const Home: Component = () => {
   const logout = useLogout()
   const { authData } = useAuthData()
-  const provider = createProvider()
+  const provider = useProvider()
   const queryAXON = createQuery(
-    () => ['balance', authData.ethAddress],
+    () => ['balance', authData.chainId, authData.ethAddress],
     () => {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       return provider!.getBalance(authData.ethAddress)
@@ -25,16 +26,17 @@ export const Home: Component = () => {
       enabled: !!authData.ethAddress,
     }
   )
+  const isEthNetwork = authData.chainId === EthSepolia.chainId
 
   const queryERC20 = createQuery(
-    () => ['erc20-balance', authData.ethAddress],
+    () => ['erc20-balance', authData.chainId, authData.ethAddress],
     () => {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       return getERC20Balance(authData.ethAddress, provider!)
     },
     {
       retry: 3,
-      enabled: !!authData.ethAddress,
+      enabled: !!authData.ethAddress && isEthNetwork,
     }
   )
 
@@ -58,11 +60,7 @@ export const Home: Component = () => {
             </button>
           </div>
           <div class="stat-desc mt-2 text-md">
-            <a
-              class="link"
-              href="https://sepoliafaucet.com/"
-              target="_blank"
-            >
+            <a class="link" href={authData.faucet} target="_blank">
               Claim
             </a>
           </div>
@@ -70,25 +68,27 @@ export const Home: Component = () => {
             <Switch>
               <Match when={queryAXON.isLoading}>...</Match>
               <Match when={queryAXON.isSuccess}>
-                {`${formatEther(queryAXON.data!.toString())} ETH`}
+                {`${formatEther(queryAXON.data!.toString())} ${authData.unit}`}
               </Match>
             </Switch>
           </div>
-          <div class="stat-desc mt-2 text-lg">
-            <Switch>
-              <Match when={queryERC20.isLoading}>...</Match>
-              <Match when={queryERC20.isSuccess}>
-                {`${queryERC20?.data?.div(10 ** 6).toString()} ERC20`}
-              </Match>
-            </Switch>
-          </div>
+          <Show when={isEthNetwork}>
+            <div class="stat-desc mt-2 text-lg">
+              <Switch>
+                <Match when={queryERC20.isLoading}>...</Match>
+                <Match when={queryERC20.isSuccess}>
+                  {`${queryERC20?.data?.div(10 ** 6).toString()} ERC20`}
+                </Match>
+              </Switch>
+            </div>
+          </Show>
           {/* <div class="stat-desc">↗︎ 400 (22%)</div> */}
         </div>
         <A href="/sign-message">
           <button class="btn btn-wide mt-8">Sign Message</button>
         </A>
         <A href="/send">
-          <button class="btn btn-wide mt-8">Send ETH</button>
+          <button class="btn btn-wide mt-8">Send {authData.unit}</button>
         </A>
         <A href="/send-erc20">
           <button class="btn btn-wide mt-8">Send ERC20</button>

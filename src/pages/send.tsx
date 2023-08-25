@@ -3,7 +3,7 @@ import { Navigate, useNavigate } from '@solidjs/router'
 import toast from 'solid-toast'
 import { Component, Show, createSignal } from 'solid-js'
 import { signTransaction } from '@joyid/evm'
-import { createProvider } from '../hooks/provider'
+import { useProvider } from '../hooks/provider'
 import { useAuthData } from '../hooks/localStorage'
 import { parseEther } from 'ethers/lib/utils'
 import { useSendSuccessToast } from '../hooks/useSendSuccessToast'
@@ -13,7 +13,7 @@ export const SendEth: Component = () => {
   const [toAddress, setToAddress] = createSignal(DEFAULT_SEND_ADDRESS)
   const [amount, setAmount] = createSignal('0.01')
   const navi = useNavigate()
-  const provider = createProvider()
+  const provider = useProvider()
   const { authData } = useAuthData()
   const [isLoading, setIsLoading] = createSignal(false)
   const successToast = useSendSuccessToast()
@@ -73,7 +73,7 @@ export const SendEth: Component = () => {
                 value={amount()}
                 onInput={(e) => setAmount(e.target.value)}
               />
-              <span>ETH</span>
+              <span>{authData.unit}</span>
             </label>
           </div>
           <button

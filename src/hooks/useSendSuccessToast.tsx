@@ -1,7 +1,8 @@
 import toast from 'solid-toast'
-import { EXPLORER_URL } from '../env'
+import { useAuthData } from './localStorage'
 
 export const useSendSuccessToast = () => {
+  const { authData } = useAuthData()
   return (txHash: string) => {
     toast.custom(
       (t) => {
@@ -25,7 +26,7 @@ export const useSendSuccessToast = () => {
                 <span>Transaction Sent. View on:</span>
                 <a
                   class="link break-all"
-                  href={`${EXPLORER_URL}/tx/${txHash}`}
+                  href={`${authData.explorer}/tx/${txHash}`}
                   target="_blank"
                 >
                   {txHash}

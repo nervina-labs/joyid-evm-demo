@@ -3,7 +3,7 @@ import { Navigate, useNavigate } from '@solidjs/router'
 import toast from 'solid-toast'
 import { Component, Show, createSignal } from 'solid-js'
 import { signTransaction } from '@joyid/evm'
-import { createProvider } from '../hooks/provider'
+import { useProvider } from '../hooks/provider'
 import { useAuthData } from '../hooks/localStorage'
 import { buildERC20Data, getERC20Balance } from '../erc20'
 import { useSendSuccessToast } from '../hooks/useSendSuccessToast'
@@ -22,7 +22,7 @@ export const SendERC20: Component = () => {
     DEFAULT_ERC20_CONTRACT_ADDRESS
   )
   const navi = useNavigate()
-  const provider = createProvider()
+  const provider = useProvider()
   const { authData } = useAuthData()
   const [isLoading, setIsLoading] = createSignal(false)
   const sendSuccessToast = useSendSuccessToast()
