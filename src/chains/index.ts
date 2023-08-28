@@ -15,5 +15,3 @@ export const Chains = chainList.reduce((prev, acc) => {
   prev[acc.name] = acc
   return prev
 }, {} as Record<string, Chain>)
-
-console.log(Chains)
