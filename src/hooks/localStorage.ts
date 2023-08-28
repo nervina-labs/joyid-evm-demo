@@ -21,7 +21,7 @@ export const EMPTY_OBJECT = Object.create(null)
 
 const [authData, setAuthData] = createLocalStore<
   { ethAddress: string } & Chain
->('demo:auth-data:1', EMPTY_OBJECT)
+>('demo:auth-data:2', EMPTY_OBJECT)
 
 export function useAuthData() {
   const isAuthcated = Object.keys(authData).length > 0
