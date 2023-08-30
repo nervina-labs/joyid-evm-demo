@@ -1,5 +1,6 @@
 import { providers } from 'ethers'
 import { useAuthData } from './localStorage'
+import { createMemo } from 'solid-js'
 
 export const SepoliaNetwork = {
   name: 'Ethereum Sepolia',
@@ -8,8 +9,12 @@ export const SepoliaNetwork = {
 
 export const useProvider = () => {
   const { authData } = useAuthData()
-  return new providers.JsonRpcBatchProvider(authData.rpcURL, {
-    name: authData.name,
-    chainId: authData.chainId,
-  })
+  // eslint-disable-next-line solid/reactivity
+  return createMemo(
+    () =>
+      new providers.JsonRpcBatchProvider(authData.rpcURL, {
+        name: authData.name,
+        chainId: authData.chainId,
+      })
+  )
 }

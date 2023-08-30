@@ -36,8 +36,7 @@ export const SendERC20: Component = () => {
   const queryERC20 = createQuery(
     () => ['erc20-balance', authData.ethAddress],
     () => {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      return getERC20Balance(authData.ethAddress, provider)
+      return getERC20Balance(authData.ethAddress, provider())
     },
     {
       retry: 3,
@@ -71,7 +70,7 @@ export const SendERC20: Component = () => {
         data: buildERC20Data(toAddress(), sendAmount),
       })
 
-      const txRes = await provider.sendTransaction(tx)
+      const txRes = await provider().sendTransaction(tx)
 
       sendSuccessToast(txRes.hash)
     } catch (error) {

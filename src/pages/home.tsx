@@ -1,5 +1,14 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { Component, Match, Show, Switch } from 'solid-js'
+import {
+  Component,
+  For,
+  Match,
+  Show,
+  Switch,
+  batch,
+  createMemo,
+  createSignal,
+} from 'solid-js'
 import { writeClipboard } from '@solid-primitives/clipboard'
 import { A, Navigate } from '@solidjs/router'
 import toast from 'solid-toast'
@@ -9,40 +18,65 @@ import { createQuery } from '@tanstack/solid-query'
 import { formatEther } from 'ethers/lib/utils'
 import { getERC20Balance } from '../erc20'
 import { useProvider } from '../hooks/provider'
-import { EthSepolia } from '../chains'
+import { Chains, EthSepolia } from '../chains'
 
 export const Home: Component = () => {
   const logout = useLogout()
-  const { authData } = useAuthData()
+  const { authData, setAuthData } = useAuthData()
+  const [selectedChain, setSelectedChain] = createSignal(authData.name)
   const provider = useProvider()
   const queryAXON = createQuery(
     () => ['balance', authData.chainId, authData.ethAddress],
     () => {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      return provider!.getBalance(authData.ethAddress)
+      return provider().getBalance(authData.ethAddress)
     },
     {
       retry: 3,
       enabled: !!authData.ethAddress,
     }
   )
-  const isEthNetwork = authData.chainId === EthSepolia.chainId
+  const isEthNetwork = createMemo(() => authData.chainId === EthSepolia.chainId)
 
   const queryERC20 = createQuery(
     () => ['erc20-balance', authData.chainId, authData.ethAddress],
     () => {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      return getERC20Balance(authData.ethAddress, provider!)
+      return getERC20Balance(authData.ethAddress, provider())
     },
     {
       retry: 3,
-      enabled: !!authData.ethAddress && isEthNetwork,
+      enabled: !!authData.ethAddress && isEthNetwork(),
     }
   )
 
   return (
     <Show when={authData.ethAddress} fallback={<Navigate href="/" />}>
       <section class="flex-col flex items-center">
+        <select
+          class="select select-black select-bordered w-full max-w-xs"
+          value={selectedChain()}
+          onChange={(e) => {
+            const val = e.currentTarget.value
+            setSelectedChain(val)
+            const chain = Chains[val]
+            batch(() => {
+              for (const key in chain) {
+                if (Object.prototype.hasOwnProperty.call(chain, key)) {
+                  const k = key as keyof typeof chain
+                  setAuthData(k, chain[k])
+                }
+              }
+            })
+          }}
+        >
+          <For each={Object.keys(Chains)}>
+            {(chainName) => {
+              const chain = Chains[chainName]
+              return <option value={chain.name}>{chain.name}</option>
+            }}
+          </For>
+        </select>
         <div class="stat">
           <div class="stat-title">EVM Account</div>
           <div class="stat-value">{truncateMiddle(authData.ethAddress)}</div>
@@ -72,7 +106,7 @@ export const Home: Component = () => {
               </Match>
             </Switch>
           </div>
-          <Show when={isEthNetwork}>
+          <Show when={isEthNetwork()}>
             <div class="stat-desc mt-2 text-lg">
               <Switch>
                 <Match when={queryERC20.isLoading}>...</Match>
