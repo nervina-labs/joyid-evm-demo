@@ -6,7 +6,6 @@ import {
   Show,
   Switch,
   batch,
-  createMemo,
   createSignal,
 } from 'solid-js'
 import { writeClipboard } from '@solid-primitives/clipboard'
@@ -16,9 +15,8 @@ import { useAuthData, useLogout } from '../hooks/localStorage'
 import { truncateMiddle } from '../utils'
 import { createQuery } from '@tanstack/solid-query'
 import { formatEther } from 'ethers/lib/utils'
-import { getERC20Balance } from '../erc20'
 import { useProvider } from '../hooks/provider'
-import { Chains, EthSepolia } from '../chains'
+import { Chains } from '../chains'
 
 export const Home: Component = () => {
   const logout = useLogout()
@@ -34,19 +32,6 @@ export const Home: Component = () => {
     {
       retry: 3,
       enabled: !!authData.ethAddress,
-    }
-  )
-  const isEthNetwork = createMemo(() => authData.chainId === EthSepolia.chainId)
-
-  const queryERC20 = createQuery(
-    () => ['erc20-balance', authData.chainId, authData.ethAddress],
-    () => {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      return getERC20Balance(authData.ethAddress, provider())
-    },
-    {
-      retry: 3,
-      enabled: !!authData.ethAddress && isEthNetwork(),
     }
   )
 
@@ -106,16 +91,6 @@ export const Home: Component = () => {
               </Match>
             </Switch>
           </div>
-          <Show when={isEthNetwork()}>
-            <div class="stat-desc mt-2 text-lg">
-              <Switch>
-                <Match when={queryERC20.isLoading}>...</Match>
-                <Match when={queryERC20.isSuccess}>
-                  {`${queryERC20?.data?.div(10 ** 6).toString()} ERC20`}
-                </Match>
-              </Switch>
-            </div>
-          </Show>
           {/* <div class="stat-desc">↗︎ 400 (22%)</div> */}
         </div>
         <A href="/sign-message">
