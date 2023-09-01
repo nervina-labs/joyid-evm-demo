@@ -10,11 +10,12 @@ export const SepoliaNetwork = {
 export const useProvider = () => {
   const { authData } = useAuthData()
   // eslint-disable-next-line solid/reactivity
-  return createMemo(
-    () =>
-      new providers.JsonRpcBatchProvider(authData.rpcURL, {
-        name: authData.name,
-        chainId: authData.chainId,
-      })
+  return createMemo(() =>
+    authData.name
+      ? new providers.JsonRpcBatchProvider(authData.rpcURL, {
+          name: authData.name,
+          chainId: authData.chainId,
+        })
+      : null
   )
 }

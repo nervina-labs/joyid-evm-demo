@@ -24,14 +24,14 @@ export const Home: Component = () => {
   const [selectedChain, setSelectedChain] = createSignal(authData.name)
   const provider = useProvider()
   const queryAXON = createQuery(
-    () => ['balance', authData.chainId, authData.ethAddress],
+    () => ['balance', authData.ethAddress],
     () => {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      return provider().getBalance(authData.ethAddress)
+      return provider()?.getBalance(authData.ethAddress)
     },
     {
       retry: 3,
-      enabled: !!authData.ethAddress,
+      enabled: !!authData.ethAddress && !!provider(),
     }
   )
 

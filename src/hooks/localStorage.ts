@@ -19,9 +19,11 @@ export function createLocalStore<T extends object>(
 
 export const EMPTY_OBJECT = Object.create(null)
 
+export const storageKey = 'demo:auth-data:2'
+
 const [authData, setAuthData] = createLocalStore<
   { ethAddress: string } & Chain
->('demo:auth-data:2', EMPTY_OBJECT)
+>(storageKey, EMPTY_OBJECT)
 
 export function useAuthData() {
   const isAuthcated = Object.keys(authData).length > 0
@@ -29,7 +31,8 @@ export function useAuthData() {
 }
 
 export function useLogout() {
-  return () =>
+  return () => {
+    // localStorage.removeItem(storageKey)
     setAuthData(
       produce((s) => {
         for (const k in s) {
@@ -40,4 +43,5 @@ export function useLogout() {
         }
       })
     )
+  }
 }

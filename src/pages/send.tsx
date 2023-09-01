@@ -30,7 +30,7 @@ export const SendEth: Component = () => {
         from: authData.ethAddress,
         value: parseEther(amount()).toString(),
       })
-      const txRes = await provider().sendTransaction(tx)
+      const txRes = await provider()!.sendTransaction(tx)
       successToast(txRes.hash)
     } catch (error) {
       const formattedError =
