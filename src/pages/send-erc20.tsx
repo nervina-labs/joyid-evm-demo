@@ -5,9 +5,8 @@ import { Component, Show, createSignal } from 'solid-js'
 import { signTransaction } from '@joyid/evm'
 import { useProvider } from '../hooks/provider'
 import { useAuthData } from '../hooks/localStorage'
-import { buildERC20Data, getERC20Balance } from '../erc20'
+import { buildERC20Data } from '../erc20'
 import { useSendSuccessToast } from '../hooks/useSendSuccessToast'
-import { createQuery } from '@tanstack/solid-query'
 import {
   DEFAULT_ERC20_CONTRACT_ADDRESS,
   DEFAULT_SEND_ADDRESS,
@@ -33,34 +32,8 @@ export const SendERC20: Component = () => {
     setContractAddress(DEFAULT_ERC20_CONTRACT_ADDRESS)
   }
 
-  const queryERC20 = createQuery(
-    () => ['erc20-balance', authData.ethAddress],
-    () => {
-      return getERC20Balance(authData.ethAddress, provider()!)
-    },
-    {
-      retry: 3,
-      enabled: !!authData.ethAddress,
-    }
-  )
-
   const onSend = async () => {
-    const balance = queryERC20.data
-    if (balance == null) {
-      // eslint-disable-next-line solid/components-return-once
-      return
-    }
     const sendAmount = parseUnits(amount(), decimals())
-    if (
-      contractAddress() === DEFAULT_ERC20_CONTRACT_ADDRESS &&
-      balance.lt(sendAmount)
-    ) {
-      toast.error('Insufficient balance', {
-        position: 'bottom-center',
-      })
-      // eslint-disable-next-line solid/components-return-once
-      return
-    }
     setIsLoading(true)
     try {
       const tx = await signTransaction({
@@ -154,7 +127,7 @@ export const SendERC20: Component = () => {
           <button
             class="btn btn-wide btn-primary mt-12"
             onClick={onSend}
-            classList={{ loading: isLoading() || queryERC20.isLoading }}
+            classList={{ loading: isLoading() }}
           >
             Send
           </button>
