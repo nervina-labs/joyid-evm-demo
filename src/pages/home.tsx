@@ -94,7 +94,10 @@ export const Home: Component = () => {
           {/* <div class="stat-desc">↗︎ 400 (22%)</div> */}
         </div>
         <A href="/sign-message">
-          <button class="btn btn-wide mt-8">Sign Message</button>
+          <button class="btn btn-wide mt-8">Sign Message(EIP191)</button>
+        </A>
+        <A href="/sign-typed-data">
+          <button class="btn btn-wide mt-8">Sign Typed Data(EIP712)</button>
         </A>
         <A href="/send">
           <button class="btn btn-wide mt-8">Send {authData.unit}</button>
@@ -102,6 +105,12 @@ export const Home: Component = () => {
         <A href="/send-erc20">
           <button class="btn btn-wide mt-8">Send ERC20</button>
         </A>
+        <a
+          href="https://github.com/nervina-labs/joyid-evm-demo"
+          target="_blank"
+        >
+          <button class="btn btn-wide mt-8 btn-info btn-outline">GitHub</button>
+        </a>
         <button
           class="btn btn-wide btn-outline mt-8"
           onClick={() => {

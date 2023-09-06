@@ -6,11 +6,14 @@ settings:
 
 dependencies:
   '@joyid/evm':
-    specifier: 0.1.0-beta.0
-    version: 0.1.0-beta.0
+    specifier: 0.2.0-beta.2
+    version: 0.2.0-beta.2
   '@solid-primitives/clipboard':
     specifier: ^1.5.4
     version: 1.5.4(solid-js@1.7.3)
+  '@solid-primitives/storage':
+    specifier: ^2.1.1
+    version: 2.1.1(solid-js@1.7.3)
   '@solidjs/router':
     specifier: 0.8.2
     version: 0.8.2(solid-js@1.7.3)
@@ -964,8 +967,8 @@ packages:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
     dev: true
 
-  /@joyid/evm@0.1.0-beta.0:
-    resolution: {integrity: sha512-ixjt1u5fbWrumcftQUoWaypsoBs9hRgqhqPBA3d0lvuympsf4CPcc/aea3odrDrUY/gpDcp1Rki1PONW2tRZhA==}
+  /@joyid/evm@0.2.0-beta.2:
+    resolution: {integrity: sha512-BW7jbAplYoIyz5SB9rcu9CKW71fSQrCAC7W6QYg/KZdwGhM5ZIy5XtRvq4yXZNNNA27khHOKBfcwo0fI0Alj1g==}
     dev: false
 
   /@jridgewell/gen-mapping@0.1.1:
@@ -1056,8 +1059,29 @@ packages:
       solid-js: 1.7.3
     dev: false
 
+  /@solid-primitives/storage@2.1.1(solid-js@1.7.3):
+    resolution: {integrity: sha512-GDbELt4Xjp0ySsHZ+RHzup0YIl1epHz8A2SVQYNRZPgkIEJk0Fyrt2vW6Etym2yUruTt8yT3d8106LVb71KIWg==}
+    peerDependencies:
+      solid-js: ^1.6.12
+      solid-start: '>=0.2.26'
+    peerDependenciesMeta:
+      solid-start:
+        optional: true
+    dependencies:
+      '@solid-primitives/utils': 6.2.1(solid-js@1.7.3)
+      solid-js: 1.7.3
+    dev: false
+
   /@solid-primitives/utils@6.1.0(solid-js@1.7.3):
     resolution: {integrity: sha512-uTikKFrq33UO+MnKt2WzZr9WYbQe5YX58ytGkL+29DL6o0pZs1wrICbd4ymzSm8azqzMcQqEQOL3HLWjuv9tLw==}
+    peerDependencies:
+      solid-js: ^1.6.12
+    dependencies:
+      solid-js: 1.7.3
+    dev: false
+
+  /@solid-primitives/utils@6.2.1(solid-js@1.7.3):
+    resolution: {integrity: sha512-TsecNzxiO5bLfzqb4OOuzfUmdOROcssuGqgh5rXMMaasoFZ3GoveUgdY1wcf17frMJM7kCNGNuK34EjErneZkg==}
     peerDependencies:
       solid-js: ^1.6.12
     dependencies:

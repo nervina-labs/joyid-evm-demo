@@ -6,6 +6,7 @@ import { Root } from './pages/root'
 import { SendEth } from './pages/send'
 import { SendERC20 } from './pages/send-erc20'
 import { SignMessage } from './pages/sign-message'
+import { SignTypeData } from './pages/sign-typed-data'
 
 export const routes: RouteDefinition[] = [
   {
@@ -27,6 +28,10 @@ export const routes: RouteDefinition[] = [
   {
     path: '/sign-message',
     component: SignMessage,
+  },
+  {
+    path: '/sign-typed-data',
+    component: SignTypeData,
   },
   {
     path: '**',
