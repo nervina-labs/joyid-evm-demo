@@ -18,3 +18,16 @@ export function append0x(s: string) {
   }
   return `0x${s}`
 }
+
+export type RedirectAction =
+  | 'send'
+  | 'send-erc20'
+  | 'sign-typed-data'
+  | 'sign-message'
+  | 'connect'
+
+export function buildRedirectUrl(action: RedirectAction) {
+  const url = new URL(`${window.location.origin}/redirect`)
+  url.searchParams.set('action', action)
+  return url.href
+}
