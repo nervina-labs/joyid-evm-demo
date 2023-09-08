@@ -1,8 +1,9 @@
 import { Component, For, Show, createSignal } from 'solid-js'
 import { Navigate, useNavigate } from '@solidjs/router'
 import { useAuthData } from '../hooks/localStorage'
-import { connect } from '@joyid/evm'
+import { connect, connectWithRedirect } from '@joyid/evm'
 import { Chains, EthSepolia } from '../chains'
+import { buildRedirectUrl } from '../utils'
 
 export const Root: Component = () => {
   const [isLoading, setIsLoading] = createSignal(false)
@@ -10,17 +11,27 @@ export const Root: Component = () => {
   const { setAuthData, authData } = useAuthData()
   const [selectedChain, setSelectedChain] = createSignal(EthSepolia.name)
 
-  const onConenct = async () => {
+  const onConenctPopup = async () => {
     setIsLoading(true)
     try {
       const address = await connect()
-      setAuthData({ ethAddress: address, ...Chains[selectedChain()] })
+      setAuthData({
+        ethAddress: address,
+        mode: 'popup',
+        ...Chains[selectedChain()],
+      })
       navi('/home')
     } catch (error) {
       console.log(error)
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const onConnectRedirect = () => {
+    setAuthData({ ...Chains[selectedChain()], mode: 'redirect' })
+    const url = buildRedirectUrl('connect')
+    connectWithRedirect(url)
   }
 
   return (
@@ -49,9 +60,12 @@ export const Root: Component = () => {
         <button
           class="btn btn-wide mt-8"
           classList={{ loading: isLoading() }}
-          onClick={onConenct}
+          onClick={onConenctPopup}
         >
-          Connect Wallet
+          Connect With Popup
+        </button>
+        <button class="btn btn-wide mt-8" onClick={onConnectRedirect}>
+          Connect With Redirect
         </button>
       </section>
     </Show>

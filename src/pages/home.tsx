@@ -7,9 +7,10 @@ import {
   Switch,
   batch,
   createSignal,
+  onMount,
 } from 'solid-js'
 import { writeClipboard } from '@solid-primitives/clipboard'
-import { A, Navigate } from '@solidjs/router'
+import { A, Navigate, useLocation } from '@solidjs/router'
 import toast from 'solid-toast'
 import { useAuthData, useLogout } from '../hooks/localStorage'
 import { truncateMiddle } from '../utils'
@@ -17,10 +18,22 @@ import { createQuery } from '@tanstack/solid-query'
 import { formatEther } from 'ethers/lib/utils'
 import { useProvider } from '../hooks/provider'
 import { Chains } from '../chains'
+import { produce } from 'solid-js/store'
+import { connectCallback } from '@joyid/evm'
 
 export const Home: Component = () => {
+  const location = useLocation<ReturnType<typeof connectCallback>>()
   const logout = useLogout()
   const { authData, setAuthData } = useAuthData()
+  onMount(() => {
+    if (location.state) {
+      setAuthData(
+        produce((data) => {
+          data.ethAddress = location.state!.address!
+        })
+      )
+    }
+  })
   const [selectedChain, setSelectedChain] = createSignal(authData.name)
   const provider = useProvider()
   const queryAXON = createQuery(
@@ -96,12 +109,21 @@ export const Home: Component = () => {
         <A href="/sign-message">
           <button class="btn btn-wide mt-8">Sign Message</button>
         </A>
+        <A href="/sign-typed-data">
+          <button class="btn btn-wide mt-8">Sign Typed Data</button>
+        </A>
         <A href="/send">
           <button class="btn btn-wide mt-8">Send {authData.unit}</button>
         </A>
         <A href="/send-erc20">
           <button class="btn btn-wide mt-8">Send ERC20</button>
         </A>
+        <a
+          href="https://github.com/nervina-labs/joyid-evm-demo"
+          target="_blank"
+        >
+          <button class="btn btn-wide mt-8 btn-info btn-outline">GitHub</button>
+        </a>
         <button
           class="btn btn-wide btn-outline mt-8"
           onClick={() => {

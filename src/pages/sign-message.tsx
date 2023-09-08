@@ -1,19 +1,44 @@
-import { Navigate, useNavigate } from '@solidjs/router'
+import { Navigate, useLocation, useNavigate } from '@solidjs/router'
 import { Component, Show, createSignal } from 'solid-js'
 import toast from 'solid-toast'
 import { verifyMessage } from 'ethers/lib.esm/utils'
-import { signMessage } from '@joyid/evm'
+import {
+  signMessage,
+  signMessageCallback,
+  signMessageWithRedirect,
+} from '@joyid/evm'
 import { useAuthData } from '../hooks/localStorage'
+import { buildRedirectUrl } from '../utils'
 
 export const SignMessage: Component = () => {
-  const [challenge, setChallenge] = createSignal('Hello World')
-  const [signature, setSignature] = createSignal('')
+  const location = useLocation<ReturnType<typeof signMessageCallback>>()
+  const [challenge, setChallenge] = createSignal(
+    location.state?.state || 'Hello World'
+  )
+  const [signature, setSignature] = createSignal(
+    location.state?.signature || ''
+  )
   const navi = useNavigate()
   const { authData } = useAuthData()
 
-  const onSignMessage = async () => {
+  const onSignMessageRedirect = () => {
+    const url = buildRedirectUrl('sign-message')
+    signMessageWithRedirect(url, challenge(), authData.ethAddress, {
+      state: challenge(),
+    })
+  }
+
+  const onSignMessagePopup = async () => {
     const sig = await signMessage(challenge(), authData.ethAddress)
     setSignature(sig)
+  }
+
+  const onSignMessage = () => {
+    if (authData.mode === 'popup') {
+      onSignMessagePopup()
+    } else {
+      onSignMessageRedirect()
+    }
   }
 
   const onVerifyMessage = () => {
@@ -61,7 +86,7 @@ export const SignMessage: Component = () => {
         <button
           class="btn btn-wide btn-outline mt-8"
           onClick={() => {
-            navi(-1)
+            navi('/home', { replace: true })
           }}
         >{`<< Go Home`}</button>
       </section>

@@ -19,10 +19,10 @@ export function createLocalStore<T extends object>(
 
 export const EMPTY_OBJECT = Object.create(null)
 
-export const storageKey = 'demo:auth-data:2'
+export const storageKey = 'demo:auth-data:3'
 
 const [authData, setAuthData] = createLocalStore<
-  { ethAddress: string } & Chain
+  { ethAddress: string; mode: 'popup' | 'redirect' } & Chain
 >(storageKey, EMPTY_OBJECT)
 
 export function useAuthData() {
