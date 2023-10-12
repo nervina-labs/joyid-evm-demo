@@ -42,7 +42,9 @@ export const SendEth: Component = () => {
       const tx = await signTransaction({
         to: toAddress(),
         from: authData.ethAddress,
-        value: parseEther(amount()).toString(),
+        value: '0',
+        gasPrice: '0x836adb97',
+        gasLimit: '0x5208',
       })
       const txRes = await provider()!.sendTransaction(tx)
       successToast(txRes.hash)
