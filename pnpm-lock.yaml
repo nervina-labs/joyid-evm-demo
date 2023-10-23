@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@joyid/evm':
-    specifier: 0.2.0-beta.3
-    version: 0.2.0-beta.3
+    specifier: 0.2.2
+    version: 0.2.2
   '@solid-primitives/clipboard':
     specifier: ^1.5.4
     version: 1.5.4(solid-js@1.7.3)
@@ -967,8 +967,8 @@ packages:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
     dev: true
 
-  /@joyid/evm@0.2.0-beta.3:
-    resolution: {integrity: sha512-yCx1nbTynNh4lu8lWSn/5TuT3WHLxDWPOdCJeiszLSTGMe0BjSFh7X8MevFWyv7KFgS3zh1rv7yYOFty3koKFA==}
+  /@joyid/evm@0.2.2:
+    resolution: {integrity: sha512-2hAL+0Cr8z3pTWXhCHsykRlnaiEYnsD3Fdi8c/AI47kyGSVx+mJNNR1zxXlUV3emce1rY/4D5qrsMYIc9Y3RGg==}
     dev: false
 
   /@jridgewell/gen-mapping@0.1.1:

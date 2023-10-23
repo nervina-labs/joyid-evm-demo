@@ -4,6 +4,7 @@ import { useAuthData } from '../hooks/localStorage'
 import { connect, connectWithRedirect } from '@joyid/evm'
 import { Chains, EthSepolia } from '../chains'
 import { buildRedirectUrl } from '../utils'
+import { JOY_ID_URL } from '../env'
 
 export const Root: Component = () => {
   const [isLoading, setIsLoading] = createSignal(false)
@@ -14,7 +15,9 @@ export const Root: Component = () => {
   const onConenctPopup = async () => {
     setIsLoading(true)
     try {
-      const address = await connect()
+      const address = await connect({
+        joyidAppURL: `${JOY_ID_URL}/?prefer=login`,
+      })
       setAuthData({
         ethAddress: address,
         mode: 'popup',
@@ -31,7 +34,9 @@ export const Root: Component = () => {
   const onConnectRedirect = () => {
     setAuthData({ ...Chains[selectedChain()], mode: 'redirect' })
     const url = buildRedirectUrl('connect')
-    connectWithRedirect(url)
+    connectWithRedirect(url, {
+      joyidAppURL: `${JOY_ID_URL}/?prefer=login`,
+    })
   }
 
   return (
