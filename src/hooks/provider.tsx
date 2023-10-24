@@ -1,6 +1,7 @@
-import { providers } from 'ethers'
 import { useAuthData } from './localStorage'
 import { createMemo } from 'solid-js'
+import { JoyIDProvider } from '@joyid/ethers'
+import { JOY_ID_URL } from '../env'
 
 export const SepoliaNetwork = {
   name: 'Ethereum Sepolia',
@@ -12,10 +13,21 @@ export const useProvider = () => {
   // eslint-disable-next-line solid/reactivity
   return createMemo(() =>
     authData.name
-      ? new providers.JsonRpcBatchProvider(authData.rpcURL, {
-          name: authData.name,
-          chainId: authData.chainId,
-        })
+      ? new JoyIDProvider(
+          authData.rpcURL,
+          { name: authData.name, chainId: authData.chainId },
+          {
+            name: 'JoyID EVM demo',
+            logo: 'https://fav.farm/🆔',
+            // optional
+            joyidAppURL: JOY_ID_URL,
+            rpcURL: authData.rpcURL,
+            network: {
+              name: authData.name,
+              chainId: authData.chainId,
+            },
+          }
+        )
       : null
   )
 }

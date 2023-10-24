@@ -1,44 +1,24 @@
-import { Navigate, useLocation, useNavigate } from '@solidjs/router'
+import { Navigate, useNavigate } from '@solidjs/router'
 import { Component, Show, createSignal } from 'solid-js'
 import toast from 'solid-toast'
 import { verifyMessage } from 'ethers/lib.esm/utils'
-import {
-  signMessage,
-  signMessageCallback,
-  signMessageWithRedirect,
-} from '@joyid/evm'
 import { useAuthData } from '../hooks/localStorage'
-import { buildRedirectUrl } from '../utils'
+import { useProvider } from '../hooks/provider'
 
 export const SignMessage: Component = () => {
-  const location = useLocation<ReturnType<typeof signMessageCallback>>()
-  const [challenge, setChallenge] = createSignal(
-    location.state?.state || 'Hello World'
-  )
-  const [signature, setSignature] = createSignal(
-    location.state?.signature || ''
-  )
+  const provider = useProvider()
+  const [challenge, setChallenge] = createSignal('Hello World')
+  const [signature, setSignature] = createSignal('')
   const navi = useNavigate()
   const { authData } = useAuthData()
 
-  const onSignMessageRedirect = () => {
-    const url = buildRedirectUrl('sign-message')
-    signMessageWithRedirect(url, challenge(), authData.ethAddress, {
-      state: challenge(),
-    })
-  }
-
   const onSignMessagePopup = async () => {
-    const sig = await signMessage(challenge(), authData.ethAddress)
+    const sig = await provider()!.getSigner().signMessage(challenge())
     setSignature(sig)
   }
 
   const onSignMessage = () => {
-    if (authData.mode === 'popup') {
-      onSignMessagePopup()
-    } else {
-      onSignMessageRedirect()
-    }
+    onSignMessagePopup()
   }
 
   const onVerifyMessage = () => {

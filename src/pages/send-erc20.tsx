@@ -1,12 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { Navigate, useLocation, useNavigate } from '@solidjs/router'
+import { Navigate, useNavigate } from '@solidjs/router'
 import toast from 'solid-toast'
-import { Component, Show, createSignal, onMount } from 'solid-js'
-import {
-  signTransaction,
-  signTransactionCallback,
-  signTransactionWithRedirect,
-} from '@joyid/evm'
+import { Component, Show, createSignal } from 'solid-js'
 import { useProvider } from '../hooks/provider'
 import { useAuthData } from '../hooks/localStorage'
 import { buildERC20Data } from '../erc20'
@@ -16,7 +11,6 @@ import {
   DEFAULT_SEND_ADDRESS,
 } from '../constant'
 import { parseUnits } from 'ethers/lib/utils'
-import { buildRedirectUrl } from '../utils'
 
 export const SendERC20: Component = () => {
   const [toAddress, setToAddress] = createSignal(DEFAULT_SEND_ADDRESS)
@@ -36,21 +30,12 @@ export const SendERC20: Component = () => {
     setDecimals(6)
     setContractAddress(DEFAULT_ERC20_CONTRACT_ADDRESS)
   }
-  const location = useLocation<ReturnType<typeof signTransactionCallback>>()
-
-  onMount(async () => {
-    if (location.state?.tx) {
-      const txRes = await provider()!.sendTransaction(location.state?.tx)
-      sendSuccessToast(txRes.hash)
-      navi('/home', { replace: true })
-    }
-  })
-
   const onSendPopup = async () => {
     const sendAmount = parseUnits(amount(), decimals())
     setIsLoading(true)
     try {
-      const tx = await signTransaction({
+      const signer = provider()!.getSigner()
+      const tx = await signer.signTransaction({
         to: contractAddress(),
         from: authData.ethAddress,
         value: '0',
@@ -74,21 +59,9 @@ export const SendERC20: Component = () => {
     }
   }
 
-  const onSendRedirect = () => {
-    const url = buildRedirectUrl('send-erc20')
-    signTransactionWithRedirect(url, {
-      to: contractAddress(),
-      from: authData.ethAddress,
-      value: '0',
-      data: buildERC20Data(toAddress(), parseUnits(amount(), decimals())),
-    })
-  }
-
   const onSend = () => {
     if (authData.mode === 'popup') {
       onSendPopup()
-    } else {
-      onSendRedirect()
     }
   }
 

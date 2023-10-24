@@ -1,9 +1,8 @@
 import { Component, For, Show, createSignal } from 'solid-js'
 import { Navigate, useNavigate } from '@solidjs/router'
 import { useAuthData } from '../hooks/localStorage'
-import { connect, connectWithRedirect } from '@joyid/evm'
+import { connect } from '@joyid/ethers'
 import { Chains, EthSepolia } from '../chains'
-import { buildRedirectUrl } from '../utils'
 
 export const Root: Component = () => {
   const [isLoading, setIsLoading] = createSignal(false)
@@ -26,12 +25,6 @@ export const Root: Component = () => {
     } finally {
       setIsLoading(false)
     }
-  }
-
-  const onConnectRedirect = () => {
-    setAuthData({ ...Chains[selectedChain()], mode: 'redirect' })
-    const url = buildRedirectUrl('connect')
-    connectWithRedirect(url)
   }
 
   return (
@@ -62,10 +55,7 @@ export const Root: Component = () => {
           classList={{ loading: isLoading() }}
           onClick={onConenctPopup}
         >
-          Connect With Popup
-        </button>
-        <button class="btn btn-wide mt-8" onClick={onConnectRedirect}>
-          Connect With Redirect
+          Connect
         </button>
       </section>
     </Show>

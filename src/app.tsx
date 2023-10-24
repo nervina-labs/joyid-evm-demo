@@ -3,7 +3,7 @@ import { useRoutes } from '@solidjs/router'
 import { Toaster } from 'solid-toast'
 import { QueryClient, QueryClientProvider } from '@tanstack/solid-query'
 import { routes } from './routes'
-import { initConfig } from '@joyid/evm'
+import { initConfig } from '@joyid/ethers'
 import { useAuthData } from './hooks/localStorage'
 import { JOY_ID_URL } from './env'
 

@@ -1,23 +1,16 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { Navigate, useLocation, useNavigate } from '@solidjs/router'
+import { Navigate, useNavigate } from '@solidjs/router'
 import toast from 'solid-toast'
-import { Component, Show, createSignal, onMount } from 'solid-js'
-import {
-  signTransaction,
-  signTransactionCallback,
-  signTransactionWithRedirect,
-} from '@joyid/evm'
+import { Component, Show, createSignal } from 'solid-js'
 import { useProvider } from '../hooks/provider'
 import { useAuthData } from '../hooks/localStorage'
 import { parseEther } from 'ethers/lib/utils'
 import { useSendSuccessToast } from '../hooks/useSendSuccessToast'
 import { DEFAULT_SEND_ADDRESS } from '../constant'
-import { buildRedirectUrl } from '../utils'
 
 export const SendEth: Component = () => {
   const [toAddress, setToAddress] = createSignal(DEFAULT_SEND_ADDRESS)
   const [amount, setAmount] = createSignal('0.01')
-  const location = useLocation<ReturnType<typeof signTransactionCallback>>()
   const navi = useNavigate()
   const provider = useProvider()
   const { authData } = useAuthData()
@@ -28,24 +21,18 @@ export const SendEth: Component = () => {
     setAmount('0.01')
   }
 
-  onMount(async () => {
-    if (location.state?.tx) {
-      const txRes = await provider()!.sendTransaction(location.state?.tx)
-      successToast(txRes.hash)
-      navi('/home', { replace: true })
-    }
-  })
-
   const onSendPopup = async () => {
     setIsLoading(true)
     try {
-      const tx = await signTransaction({
-        to: toAddress(),
-        from: authData.ethAddress,
-        value: '0',
-        gasPrice: '0x836adb97',
-        gasLimit: '0x5208',
-      })
+      const tx = await provider()!
+        .getSigner()
+        .signTransaction({
+          to: toAddress(),
+          from: authData.ethAddress,
+          value: parseEther(amount()).toHexString(),
+          gasPrice: '0x836adb97',
+          gasLimit: '0x5208',
+        })
       const txRes = await provider()!.sendTransaction(tx)
       successToast(txRes.hash)
     } catch (error) {
@@ -63,20 +50,9 @@ export const SendEth: Component = () => {
     }
   }
 
-  const onSendRedirect = () => {
-    const url = buildRedirectUrl('send')
-    signTransactionWithRedirect(url, {
-      to: toAddress(),
-      from: authData.ethAddress,
-      value: parseEther(amount()).toString(),
-    })
-  }
-
   const onSend = () => {
     if (authData.mode === 'popup') {
       onSendPopup()
-    } else {
-      onSendRedirect()
     }
   }
 

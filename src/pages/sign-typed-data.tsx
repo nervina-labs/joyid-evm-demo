@@ -1,20 +1,12 @@
-import { Navigate, useLocation, useNavigate } from '@solidjs/router'
+import { Navigate, useNavigate } from '@solidjs/router'
 import { Component, Show, createSignal } from 'solid-js'
 import toast from 'solid-toast'
 import { verifyTypedData } from 'ethers/lib.esm/utils'
-import {
-  signMessageCallback,
-  signTypedData,
-  signTypedDataWithRedirect,
-} from '@joyid/evm'
 import { useAuthData } from '../hooks/localStorage'
-import { buildRedirectUrl } from '../utils'
+import { signTypedData } from '@joyid/ethers'
 
 export const SignTypeData: Component = () => {
-  const location = useLocation<ReturnType<typeof signMessageCallback>>()
-  const [signature, setSignature] = createSignal(
-    location.state?.signature || ''
-  )
+  const [signature, setSignature] = createSignal('')
   const navi = useNavigate()
   const { authData } = useAuthData()
   const typedData = {
@@ -50,20 +42,13 @@ export const SignTypeData: Component = () => {
   } as const
 
   const onSignMessagePopup = async () => {
-    const sig = await signTypedData(typedData, authData.ethAddress)
+    const sig = await signTypedData(typedData)
     setSignature(sig)
-  }
-
-  const onSignMessageRedirect = () => {
-    const url = buildRedirectUrl('sign-typed-data')
-    signTypedDataWithRedirect(url, typedData, authData.ethAddress)
   }
 
   const onSignMessage = () => {
     if (authData.mode === 'popup') {
       onSignMessagePopup()
-    } else {
-      onSignMessageRedirect()
     }
   }
 

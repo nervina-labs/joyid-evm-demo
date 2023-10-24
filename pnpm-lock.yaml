@@ -5,9 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
-  '@joyid/evm':
-    specifier: 0.2.0-beta.3
-    version: 0.2.0-beta.3
+  '@joyid/ethers':
+    specifier: ^0.1.4
+    version: 0.1.4(ethers@5.7.0)
   '@solid-primitives/clipboard':
     specifier: ^1.5.4
     version: 1.5.4(solid-js@1.7.3)
@@ -967,8 +967,17 @@ packages:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
     dev: true
 
-  /@joyid/evm@0.2.0-beta.3:
-    resolution: {integrity: sha512-yCx1nbTynNh4lu8lWSn/5TuT3WHLxDWPOdCJeiszLSTGMe0BjSFh7X8MevFWyv7KFgS3zh1rv7yYOFty3koKFA==}
+  /@joyid/ethers@0.1.4(ethers@5.7.0):
+    resolution: {integrity: sha512-cgaZpjv0MQMN9uJ/7O+188GrhgzZPlj+xC1S2GO5QbNNTjKV2+8PQZn3PpQNXC0kGkzbX5vFGIt9BV0pR88jpw==}
+    peerDependencies:
+      ethers: ^5.0.0
+    dependencies:
+      '@joyid/evm': 0.2.3
+      ethers: 5.7.0
+    dev: false
+
+  /@joyid/evm@0.2.3:
+    resolution: {integrity: sha512-3x4LYO6EP+7AhTr14P48mbYd+9ZpRU44+5l2WNNVgRURMSCJYXmWYoqRzOSzKiIaJJ00gfQO2+NBsLCNUGK6vQ==}
     dev: false
 
   /@jridgewell/gen-mapping@0.1.1:
