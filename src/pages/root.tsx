@@ -1,7 +1,7 @@
 import { Component, For, Show, createSignal } from 'solid-js'
 import { Navigate, useNavigate } from '@solidjs/router'
 import { useAuthData } from '../hooks/localStorage'
-import { connect, connectWithRedirect } from '@joyid/evm'
+import { connect, connectWithRedirect, initConfig } from '@joyid/evm'
 import { Chains, EthSepolia } from '../chains'
 import { buildRedirectUrl } from '../utils'
 
@@ -47,6 +47,12 @@ export const Root: Component = () => {
             onChange={(e) => {
               const val = e.currentTarget.value
               setSelectedChain(val)
+              initConfig({
+                network: {
+                  chainId: Chains[val].chainId,
+                  name: Chains[val].name,
+                },
+              })
             }}
           >
             <For each={Object.keys(Chains)}>
