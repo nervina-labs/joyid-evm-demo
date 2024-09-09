@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@joyid/evm':
-    specifier: 0.2.0-beta.3
-    version: 0.2.0-beta.3
+    specifier: 0.4.0
+    version: 0.4.0(typescript@5.0.4)
   '@solid-primitives/clipboard':
     specifier: ^1.5.4
     version: 1.5.4(solid-js@1.7.3)
@@ -967,8 +967,23 @@ packages:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
     dev: true
 
-  /@joyid/evm@0.2.0-beta.3:
-    resolution: {integrity: sha512-yCx1nbTynNh4lu8lWSn/5TuT3WHLxDWPOdCJeiszLSTGMe0BjSFh7X8MevFWyv7KFgS3zh1rv7yYOFty3koKFA==}
+  /@joyid/common@0.0.4(typescript@5.0.4):
+    resolution: {integrity: sha512-TwZSSBTSz5CRYmaAiUtaVujk/NukeYzvB9TFPSuQz1c8OeApRLk8wg/Kw1h9Ws/DiXyfVlMBW80U3UT7z89z7A==}
+    dependencies:
+      abitype: 0.8.7(typescript@5.0.4)
+      type-fest: 4.6.0
+    transitivePeerDependencies:
+      - typescript
+      - zod
+    dev: false
+
+  /@joyid/evm@0.4.0(typescript@5.0.4):
+    resolution: {integrity: sha512-bKX/DDAzABPjRO+Zp1RT2YWseyibTAfq3X4vdMMnnUJ5gm3FvbufWK2GLq0D9I6z/8Kx7Cav7apWDbdTMGP+Og==}
+    dependencies:
+      '@joyid/common': 0.0.4(typescript@5.0.4)
+    transitivePeerDependencies:
+      - typescript
+      - zod
     dev: false
 
   /@jridgewell/gen-mapping@0.1.1:
@@ -1250,6 +1265,18 @@ packages:
       '@typescript-eslint/types': 5.59.0
       eslint-visitor-keys: 3.4.0
     dev: true
+
+  /abitype@0.8.7(typescript@5.0.4):
+    resolution: {integrity: sha512-wQ7hV8Yg/yKmGyFpqrNZufCxbszDe5es4AZGYPBitocfSqXtjrTG9JMWFcc4N30ukl2ve48aBTwt7NJxVQdU3w==}
+    peerDependencies:
+      typescript: '>=5.0.4'
+      zod: ^3 >=3.19.1
+    peerDependenciesMeta:
+      zod:
+        optional: true
+    dependencies:
+      typescript: 5.0.4
+    dev: false
 
   /acorn-jsx@5.3.2(acorn@8.8.2):
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
@@ -3519,6 +3546,11 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
+  /type-fest@4.6.0:
+    resolution: {integrity: sha512-rLjWJzQFOq4xw7MgJrCZ6T1jIOvvYElXT12r+y0CC6u67hegDHaxcPqb2fZHOGlqxugGQPNB1EnTezjBetkwkw==}
+    engines: {node: '>=16'}
+    dev: false
+
   /typed-array-length@1.0.4:
     resolution: {integrity: sha512-KjZypGq+I/H7HI5HlOoGHkWUUGq+Q0TPhQurLbyrVrvnKTBgzLhIJ7j6J/XTQOi0d1RjyZ0wdas8bKs2p0x3Ng==}
     dependencies:
@@ -3531,7 +3563,6 @@ packages:
     resolution: {integrity: sha512-cW9T5W9xY37cc+jfEnaUvX91foxtHkza3Nw3wkoF4sSlKn0MONdkdEndig/qPBWXNkmplh3NzayQzCiHM4/hqw==}
     engines: {node: '>=12.20'}
     hasBin: true
-    dev: true
 
   /unbox-primitive@1.0.2:
     resolution: {integrity: sha512-61pPlCD9h51VoreyJ0BReideM3MDKMKnh6+V9L08331ipq6Q8OFXZYiqP6n/tbHx4s5I9uRhcye6BrbkizkBDw==}
